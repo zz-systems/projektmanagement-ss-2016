@@ -27,14 +27,17 @@ VECTORIZED vreal add(const vreal &a, const vreal &b)
 ### Beispiel für eine Addition OHNE "gorynych":
 
 #### SSE:
+
 ```C++
 __m128 add(__m128 &a, __m128 &b)
 {
   return _mm_add_ps(a, b);
 }
 ```
+
 #### AVX:
-```
+
+```C++
 __m256 add(__m256 &a, __m256 &b)
 {
   return _mm256_add_ps(a, b);
