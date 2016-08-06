@@ -62,7 +62,7 @@ Fähigkeit andere Funktionen oder sogar Programmiersprachen nehmen und denselben
 mehrmals umsetzen und warten muss, was dem DRY-Prinzip widerspricht.
 
 ## Ist Zustand:
-Aktuell unterstützt "gorynych" x86-64 CPU Befehlssätze wie
+### Aktuell unterstützt "gorynych" x86-64 CPU Befehlssätze wie
 * x87
 * SSE2
 * SSE3
@@ -71,7 +71,8 @@ Aktuell unterstützt "gorynych" x86-64 CPU Befehlssätze wie
 * FMA3/FMA4
 * AVX1 (unvollständig)
 * AVX2
-Aktuell bietet "gorynych" folgende Basisfunktionen:
+
+### Aktuell bietet "gorynych" folgende Basisfunktionen:
 * arithmetische Operationen
 * logische Operationen
 * lineare Algebra
@@ -87,11 +88,14 @@ Aktuell bietet "gorynych" folgende Basisfunktionen:
 * Es müssen alle aktuell unterstützten Funktioen auch für GPU's umgesetzt werden.
 
 ## Nicht-funktionale Anforderungen
+
 ### Benutzbarkeit
 * Für den Endanwender des Frameworks muss dieses logisch schlüssig und nachvollziehbar sein
 * Eine entsprechende Dokumentation wird erweitert bzw. erstellt.
+
 ### Wartbarkeit:
 * Die Frameworkarchitektur muss weiterhin modular bleiben.
+
 ### Zuverlässigkeit:
 * Die angebotene Funktionalität wird im TDD-Verfahren entwickelt und validiert.
 * Für jede Funktion sind entsprechende Unit-Tests notwendig.
