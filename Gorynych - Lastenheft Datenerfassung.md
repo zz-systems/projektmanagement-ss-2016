@@ -43,7 +43,7 @@ float add(float a, float b)
 #### SSE: 4x float32
 
 ```C++
-\__m128 add(\__m128 a, \__m128 b)
+m128 add(m128 a, m128 b)
 {
   return _mm_add_ps(a, b);
 }
@@ -52,7 +52,7 @@ float add(float a, float b)
 #### AVX: 8x float32
 
 ```C++
-\__m256 add(\__m256 &a, \__m256 &b)
+m256 add(m256 &a, m256 &b)
 {
   return _mm256_add_ps(a, b);
 }
@@ -60,7 +60,7 @@ float add(float a, float b)
 
 #### AVX512: 16x float32
 ```C++
-\__m512 add(\__m512 &a, \__m512 &b)
+m512 add(m512 &a, m512 &b)
 {
   return _mm512_add_ps(a, b);
 }
