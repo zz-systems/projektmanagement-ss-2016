@@ -1,17 +1,20 @@
 # Stichpunkte Lastenheft
 
 ## Überblick über das Projekt:
-"gorynych" ist eine Abstraktionsschicht zur Durchführung von beschleunigten Berechnungen auf heterogenen Systemen.
+"gorynych" ist eine templateorientierte Abstraktionsschicht zur Durchführung von beschleunigten Berechnungen auf heterogenen Systemen.
 Mit diesem Framework ist es möglich, ein einziges Mal den Algorithmus zu implementieren und von der automatischen Abbildung
 auf verschiedene Prozessor-Fähigkeiten zu profitieren.
 
 Ohne "gorynych" müsste man für jeden Prozessor-Fähigkeit den Algorithmus neu schreiben,
 dies hat erhöhte Entwicklungs- und Wartungskosten zur Folge.
+Man könnte natürlich zur Autovektorisierungsfähigkeiten moderner Compiler greifen (LLVM/CLang, GCC, ICC, MSVC), die nicht immer und nicht alle Konstrukte erkennt und (mit Ausnahme der Intel Compilier Collection) auch nicht zur Laufzeit dispatched werden kann. Warum nicht ICC? Weil bei der Intel Compiler Collection AMD Prozessoren nicht als "GenuineIntel" erkannt werden und für sie wird der langsamste Pfad ausgewählt.
+Zudem gilt der emittierte Maschinencode nur für CPU's.
 
 Im Groben unterscheidet sich die Entwicklung mit diesem Framework nicht von der Entwicklung mit purem C++, mit einer Außnahme:
-- Das Framework ist auf größere Datenmengen ausgelegt und bietet entsprechende Funktionen an, um Datenfelder abzuarbeiten. Bei der Zusammenrechnung von zwei einzelnen Zahlen profitiert man nicht.
-- Die üblichen Konditionsoperatoren sind i.d.R nicht anwendbar, bei der Entwicklung muss man sich an die Sprunglose Arithmetik halten.
-- Die Üblichen Container sind i.d.R nicht ohne Weiteres anwendbar, da sie mit skalaren Werten arbeiten.
+* Das Framework ist auf größere Datenmengen ausgelegt und bietet entsprechende Funktionen an, um Datenfelder abzuarbeiten. Bei der Zusammenrechnung von zwei einzelnen Zahlen profitiert man nicht.
+* Die üblichen Konditionsoperatoren sind i.d.R nicht anwendbar, bei der Entwicklung muss man sich an die Sprunglose Arithmetik halten.
+* Die Üblichen Container sind i.d.R nicht ohne Weiteres anwendbar, da sie mit skalaren Werten arbeiten.
+* Die entwickelten Funktionen sind über die Scheduling und Dispatch Funktionalität des Frameworks aufzurufen. Diese kümmert sich um die passende Zweig-Auswahl, Multithreading und Datenzugriffe.
 
 
 ### Beispiel für eine Addition MIT "gorynych":
@@ -27,21 +30,39 @@ VECTORIZED vreal add(const vreal &a, const vreal &b)
 
 ### Beispiel für eine Addition OHNE "gorynych":
 
-#### SSE:
+
+#### Skalar: 1x float32
 
 ```C++
-__m128 add(__m128 &a, __m128 &b)
+float add(float a, float b)
+{
+  return a + b;
+}
+```
+
+#### SSE: 4x float32
+
+```C++
+\__m128 add(\__m128 a, \__m128 b)
 {
   return _mm_add_ps(a, b);
 }
 ```
 
-#### AVX:
+#### AVX: 8x float32
 
 ```C++
-__m256 add(__m256 &a, __m256 &b)
+\__m256 add(\__m256 &a, \__m256 &b)
 {
   return _mm256_add_ps(a, b);
+}
+```
+
+#### AVX512: 16x float32
+```C++
+\__m512 add(\__m512 &a, \__m512 &b)
+{
+  return _mm512_add_ps(a, b);
 }
 ```
 
@@ -56,7 +77,6 @@ __kernel void add (__global const float* a, __global const float* b, __global fl
       res[idx] = src_a[idx] + src_b[idx];
 }
 ```
-
 
 An diesem sehr einfachen Beispiel sieht man bereits, dass man ohne "Gorynych" für jeden
 Befehlssatz andere Funktionen/2Befehle" oder sogar Programmiersprachen verwenden und denselben Algorithmus
@@ -103,8 +123,11 @@ mehrmals umsetzen und warten muss, was dem DRY-Prinzip widerspricht.
     * _GPGPU Basis_ (zu implementieren)
   * Dispatcher (zu erweitern)
 * Hilfsfunktionen
-  * Speicherverwaltung (aligned memory)  
-  * Angepasste Kollektionen (aligned memory)
+  * Speicherverwaltung
+    * CPU (aligned memory)
+    * _GPGPU_ (zu implementieren)
+  * Angepasste Kollektionen
+    * CPU (aligned memory)
     * _GPGPU_ (zu implementieren)
 * Sonstiges
   * Makros
@@ -121,13 +144,13 @@ mehrmals umsetzen und warten muss, was dem DRY-Prinzip widerspricht.
 
 ### Wartbarkeit:
 * Die Frameworkarchitektur muss weiterhin modular bleiben.
+* Refactoring soll bei Bedarf und nicht ausgeschöpftem Zeitbudget erfolgen.
 
 ### Zuverlässigkeit:
 * Die angebotene Funktionalität wird im TDD-Verfahren entwickelt und validiert.
 * Für jede Funktion sind entsprechende Unit-Tests notwendig.
 * Codegenerierung wird getestet.
 * Ausführungsergebnisse und Ausführungszeit werden ebenfalls getestet.
-
 
 ## Abnahmekriterien
 1. Iteration - Codgenerierung ist für die geforderte Funktionalität valide.
