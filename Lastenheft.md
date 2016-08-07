@@ -24,11 +24,11 @@ Man könnte natürlich zur Autovektorisierungsfähigkeiten moderner Compiler gre
 Zudem gilt der emittierte Maschinencode nur für CPU's.
 
 Im Groben unterscheidet sich die Entwicklung mit diesem Framework nicht von der Entwicklung mit purem C++, mit einer Außnahme:
+
 * Das Framework ist auf größere Datenmengen ausgelegt und bietet entsprechende Funktionen an, um Datenfelder abzuarbeiten. Bei der Zusammenrechnung von zwei einzelnen Zahlen profitiert man nicht.
-* Die üblichen Konditionsoperatoren sind i.d.R nicht anwendbar, bei der Entwicklung muss man sich an die Sprunglose Arithmetik halten.
+* Bei der Entwicklung muss man sich an die Sprunglose Arithmetik halten.
 * Die Üblichen Container sind i.d.R nicht ohne Weiteres anwendbar, da sie mit skalaren Werten arbeiten.
 * Die entwickelten Funktionen sind über die Scheduling und Dispatch Funktionalität des Frameworks aufzurufen. Diese kümmert sich um die passende Zweig-Auswahl, Multithreading und Datenzugriffe.
-
 
 ### Beispiel für eine Addition MIT "gorynych":
 
@@ -72,6 +72,7 @@ __m256 add(__m256 a, __m256 b)
 ```
 
 #### AVX512: 16x float32
+
 ```C++
 __m512 add(__m512 a, __m512 b)
 {
@@ -80,6 +81,7 @@ __m512 add(__m512 a, __m512 b)
 ```
 
 #### OpenCL:
+
 ```OpenCL
 __kernel void add (__global const float* a, __global const float* b, __global float* result, const int num)
 {
@@ -116,7 +118,7 @@ mehrmals umsetzen und warten muss, was dem DRY-Prinzip widerspricht.
 ## Soll Zustand:
 * Mit "gorynych" erstellte Projekte sollen auch auf hochparallelen, modernen Grafikprozessoren lauffähig sein, die konfigurierbare Shaderkerne unterstützen.
 * Damit entwickelte Projekte sollen möglichst ohne Anpassungen lauffähig sein.
-* Dies bedeutet, dass die vorhandene Schnttstelle für GPGPU implementiert werden soll.#
+* Dies bedeutet, dass die vorhandene Schnttstelle für GPGPU implementiert werden soll.
 
 ### Systemarchitektur im Überblick
 
