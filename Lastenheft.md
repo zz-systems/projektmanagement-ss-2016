@@ -91,7 +91,7 @@ __kernel void add (__global const float* a, __global const float* b, __global fl
 ```
 
 An diesem sehr einfachen Beispiel sieht man bereits, dass man ohne "Gorynych" für jeden
-Befehlssatz andere Funktionen/2Befehle" oder sogar Programmiersprachen verwenden und denselben Algorithmus
+Befehlssatz andere Funktionen/Befehle" oder sogar Programmiersprachen verwenden und denselben Algorithmus
 mehrmals umsetzen und warten muss, was dem DRY-Prinzip widerspricht.
 
 ## Ist Zustand:
