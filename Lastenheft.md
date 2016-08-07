@@ -56,7 +56,7 @@ float add(float a, float b)
 #### SSE: 4x float32
 
 ```C++
-m128 add(m128 a, m128 b)
+__m128 add(__m128 a, __m128 b)
 {
   return _mm_add_ps(a, b);
 }
@@ -65,7 +65,7 @@ m128 add(m128 a, m128 b)
 #### AVX: 8x float32
 
 ```C++
-m256 add(m256 &a, m256 &b)
+__m256 add(__m256 a, __m256 b)
 {
   return _mm256_add_ps(a, b);
 }
@@ -73,16 +73,15 @@ m256 add(m256 &a, m256 &b)
 
 #### AVX512: 16x float32
 ```C++
-m512 add(m512 &a, m512 &b)
+__m512 add(__m512 a, __m512 b)
 {
   return _mm512_add_ps(a, b);
 }
 ```
 
 #### OpenCL:
-
-```C
-\_\_kernel void add (\_\_global const float* a, \_\_global const float* b, \_\_global float* result, const int num)
+```OpenCL
+__kernel void add (__global const float* a, __global const float* b, __global float* result, const int num)
 {
    const int idx = get_global_id(0);
 
