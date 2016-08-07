@@ -57,11 +57,12 @@ __kernel void add (__global const float* a, __global const float* b, __global fl
 ```
 
 
-An diesem sehr einfachen beispiel sieht man bereits dass man ohne Gorynych für jede
-Fähigkeit andere Funktionen oder sogar Programmiersprachen nehmen und denselben Algorithmus
+An diesem sehr einfachen Beispiel sieht man bereits, dass man ohne "Gorynych" für jede
+Befehlssatz andere Funktionen oder sogar Programmiersprachen verwenden und denselben Algorithmus
 mehrmals umsetzen und warten muss, was dem DRY-Prinzip widerspricht.
 
 ## Ist Zustand:
+
 ### Aktuell unterstützt "gorynych" x86-64 CPU Befehlssätze wie
 * x87
 * SSE2
@@ -81,8 +82,31 @@ mehrmals umsetzen und warten muss, was dem DRY-Prinzip widerspricht.
 
 ## Soll Zustand:
 * Mit "gorynych" erstellte Projekte sollen auch auf hochparallelen, modernen Grafikprozessoren lauffähig sein
-* Diese Projekte sollen möglichst ohne Anpassungen lauffähig sein.
-* Dies bedeutet, dass die vorhandene Schnttstelle auch für GPGPU implementiert werden soll.
+* Damit entwickelte Projekte sollen möglichst ohne Anpassungen lauffähig sein.
+* Dies bedeutet, dass die vorhandene Schnttstelle für GPGPU implementiert werden soll.#
+
+### Systemarchitektur im Überblick
+
+* Befehlssatzzweige
+  * x87 Kompatibilitätsschicht
+  * SSE
+  * AVX
+  * _GPGPU_ (zu implementieren)
+* Mathematische Funktionen
+  * Grundfunktionen
+  * Lineare Algebra
+* Plattformhelfer
+  * Systeminformation
+  * Scheduler
+    * CPU Basis
+    * _GPGPU Basis_ (zu implementieren)
+  * Dispatcher (zu erweitern)
+* Hilfsfunktionen
+  * Speicherverwaltung (aligned memory)  
+  * Angepasste Kollektionen (aligned memory)
+* Sonstiges
+  * Makros
+  * Konstantengenerierung
 
 ## Funktionale Anforderungen:
 * Es müssen alle aktuell unterstützten Funktioen auch für GPU's umgesetzt werden.
@@ -99,3 +123,11 @@ mehrmals umsetzen und warten muss, was dem DRY-Prinzip widerspricht.
 ### Zuverlässigkeit:
 * Die angebotene Funktionalität wird im TDD-Verfahren entwickelt und validiert.
 * Für jede Funktion sind entsprechende Unit-Tests notwendig.
+* Codegenerierung wird getestet.
+* Ausführungsergebnisse und Ausführungszeit werden ebenfalls getestet.
+
+
+## Abnahmekriterien
+1) * Iteration - Codgenerierung ist für die geforderte Funktionalität valide.
+2) * Iteration - Der generierte Code ist lauffähig und valide.
+3) * Iteration - Das Projekt 'solowej' ist mit der angepassten SIMD-Abstraktionsschicht lauffähig und valide.
