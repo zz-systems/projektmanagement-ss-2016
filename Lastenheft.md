@@ -81,7 +81,7 @@ m512 add(m512 &a, m512 &b)
 
 #### OpenCL:
 
-```OpenCL
+```C
 \_\_kernel void add (\_\_global const float* a, \_\_global const float* b, \_\_global float* result, const int num)
 {
    const int idx = get_global_id(0);
