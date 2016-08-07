@@ -11,6 +11,7 @@ dies hat erhöhte Entwicklungs- und Wartungskosten zur Folge.
 Im Groben unterscheidet sich die Entwicklung mit diesem Framework nicht von der Entwicklung mit purem C++, mit einer Außnahme:
 - Das Framework ist auf größere Datenmengen ausgelegt und bietet entsprechende Funktionen an, um Datenfelder abzuarbeiten. Bei der Zusammenrechnung von zwei einzelnen Zahlen profitiert man nicht.
 - Die üblichen Konditionsoperatoren sind i.d.R nicht anwendbar, bei der Entwicklung muss man sich an die Sprunglose Arithmetik halten.
+- Die Üblichen Container sind i.d.R nicht ohne Weiteres anwendbar, da sie mit skalaren Werten arbeiten.
 
 
 ### Beispiel für eine Addition MIT "gorynych":
@@ -57,8 +58,8 @@ __kernel void add (__global const float* a, __global const float* b, __global fl
 ```
 
 
-An diesem sehr einfachen Beispiel sieht man bereits, dass man ohne "Gorynych" für jede
-Befehlssatz andere Funktionen oder sogar Programmiersprachen verwenden und denselben Algorithmus
+An diesem sehr einfachen Beispiel sieht man bereits, dass man ohne "Gorynych" für jeden
+Befehlssatz andere Funktionen/2Befehle" oder sogar Programmiersprachen verwenden und denselben Algorithmus
 mehrmals umsetzen und warten muss, was dem DRY-Prinzip widerspricht.
 
 ## Ist Zustand:
@@ -70,7 +71,7 @@ mehrmals umsetzen und warten muss, was dem DRY-Prinzip widerspricht.
 * SSSE3
 * SSE4.1/SSE4.2
 * FMA3/FMA4
-* AVX1 (unvollständig)
+* AVX1
 * AVX2
 
 ### Aktuell bietet "gorynych" folgende Basisfunktionen:
@@ -78,10 +79,10 @@ mehrmals umsetzen und warten muss, was dem DRY-Prinzip widerspricht.
 * logische Operationen
 * lineare Algebra
 * Rundung
-* Basisfunktionen wie absolutwert, minimum, maximum, etc.
+* Basisfunktionen wie Absolutwert, Minimum, Maximum, Quadratische Wurzel, etc..
 
 ## Soll Zustand:
-* Mit "gorynych" erstellte Projekte sollen auch auf hochparallelen, modernen Grafikprozessoren lauffähig sein
+* Mit "gorynych" erstellte Projekte sollen auch auf hochparallelen, modernen Grafikprozessoren lauffähig sein, die konfigurierbare Shaderkerne unterstützen.
 * Damit entwickelte Projekte sollen möglichst ohne Anpassungen lauffähig sein.
 * Dies bedeutet, dass die vorhandene Schnttstelle für GPGPU implementiert werden soll.#
 
@@ -104,6 +105,7 @@ mehrmals umsetzen und warten muss, was dem DRY-Prinzip widerspricht.
 * Hilfsfunktionen
   * Speicherverwaltung (aligned memory)  
   * Angepasste Kollektionen (aligned memory)
+    * _GPGPU_ (zu implementieren)
 * Sonstiges
   * Makros
   * Konstantengenerierung
@@ -130,4 +132,5 @@ mehrmals umsetzen und warten muss, was dem DRY-Prinzip widerspricht.
 ## Abnahmekriterien
 1. Iteration - Codgenerierung ist für die geforderte Funktionalität valide.
 2. Iteration - Der generierte Code ist lauffähig und valide.
-3. Iteration - Das Projekt 'solowej' ist mit der angepassten SIMD-Abstraktionsschicht lauffähig und valide.
+3. Iteration - Das Projekt 'solowej' ist mit der angepassten SIMD-Abstraktionsschicht zum Teil lauffähig und valide.
+4. Iteration - Komplexere "solowej" Module, die LUT's verwenden, sin ebenfalls lauffähig und valide.
