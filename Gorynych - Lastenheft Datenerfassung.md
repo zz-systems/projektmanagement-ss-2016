@@ -1,4 +1,17 @@
-# Stichpunkte Lastenheft
+# Lastenheft - Weiterentwicklung des "Gorynych" Projekts
+
+## Struktur
+
+* Projektbeschreibung
+* Ist-Zustand
+* Soll-Zustand
+* Systemarchitektur
+* Funktionale Anforderungen
+* Nicht-Funktionale Anforderungen
+  * Benutzbarkeit
+  * Wartbarkeit
+  * Zuverlässigkeit
+* Abnahmekriterien
 
 ## Überblick über das Projekt:
 "gorynych" ist eine templateorientierte Abstraktionsschicht zur Durchführung von beschleunigten Berechnungen auf heterogenen Systemen.
