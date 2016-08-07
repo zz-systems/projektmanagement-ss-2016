@@ -128,6 +128,6 @@ mehrmals umsetzen und warten muss, was dem DRY-Prinzip widerspricht.
 
 
 ## Abnahmekriterien
-1) * Iteration - Codgenerierung ist für die geforderte Funktionalität valide.
-2) * Iteration - Der generierte Code ist lauffähig und valide.
-3) * Iteration - Das Projekt 'solowej' ist mit der angepassten SIMD-Abstraktionsschicht lauffähig und valide.
+1. Iteration - Codgenerierung ist für die geforderte Funktionalität valide.
+2. Iteration - Der generierte Code ist lauffähig und valide.
+3. Iteration - Das Projekt 'solowej' ist mit der angepassten SIMD-Abstraktionsschicht lauffähig und valide.
