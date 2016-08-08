@@ -88,7 +88,7 @@ __kernel void add (__global const float* a, __global const float* b, __global fl
    const int idx = get_global_id(0);
 
    if (idx < num)
-      res[idx] = src_a[idx] + src_b[idx];
+      result[idx] = a[idx] + b[idx];
 }
 ```
 
