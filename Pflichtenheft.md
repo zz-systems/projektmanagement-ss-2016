@@ -65,6 +65,7 @@ Erst ein Produkt, welches "Gorynych" einsetzt, benötigt einen Rechner mit einem
 * F-2-30 Das Build-System muss um den OpenCL-Zweig erweitert werden
 
 Vorbedingung: F-1-X müssen implementiert sein
+
 Für automatisiertes Testen ist die Verteilung zur Laufzeit nicht von Bedeutung
 
 ### 4.3 Basisioperatoren
@@ -99,8 +100,9 @@ Vorbedingung: F-1-10 und F-1-20
 Die o.g Funktionalität gilt sowohl für Vektor- als auch Skalartypen
 Vorbedingung: F-1-10, F-1-20, F-5-10
 
-* Vektorisieren Werte auslesen
-* Doppelt inderekte Speicherzugriffe
+* F-4-90 Speicherzugriffe
+  * F-4-91 Vektorisieren Werte auslesen
+  * F-4-92 Doppelt inderekte Speicherzugriffe
 
 Vorbedingung: F-1-10 und F-1-20
 
