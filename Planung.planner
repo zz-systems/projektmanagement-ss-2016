@@ -20,20 +20,20 @@
     </calendar>
   </calendars>
   <tasks>
-    <task id="1" name="[F-1] - Grundlagen" note="" work="198000" start="20160817T000000Z" end="20160906T130500Z" work-start="20160817T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
-      <task id="2" name="[F-1-10] - OpenCL int32" note="OpenCL-Abstraktion f&#xFC;r 32 " work="7200" start="20160817T000000Z" end="20160817T170000Z" work-start="20160817T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
-      <task id="3" name="[F-1-20] - OpenCL float32" note="" work="7200" start="20160817T000000Z" end="20160817T170000Z" work-start="20160817T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
+    <task id="1" name="[F-1] - Grundlagen" note="" work="230400" start="20160817T000000Z" end="20160907T130500Z" work-start="20160817T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+      <task id="2" name="[F-1-10] - OpenCL int32" note="OpenCL-Abstraktion f&#xFC;r 32 " work="14400" start="20160817T000000Z" end="20160818T170000Z" work-start="20160817T080000Z" percent-complete="10" priority="0" type="normal" scheduling="fixed-work"/>
+      <task id="3" name="[F-1-20] - OpenCL float32" note="" work="14400" start="20160817T000000Z" end="20160818T170000Z" work-start="20160817T080000Z" percent-complete="10" priority="0" type="normal" scheduling="fixed-work"/>
       <task id="4" name="[F-1-30] - OpenCL-Scheduler" note="" work="28800" start="20160817T000000Z" end="20160822T170000Z" work-start="20160817T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
-      <task id="5" name="[F-1-40] - OpenCL-Codegen" note="" work="144000" start="20160817T170000Z" end="20160906T130500Z" work-start="20160818T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+      <task id="5" name="[F-1-40] - OpenCL-Codegen" note="" work="144000" start="20160818T170000Z" end="20160907T130500Z" work-start="20160819T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
         <predecessors>
           <predecessor id="1" predecessor-id="2" type="FS"/>
           <predecessor id="1" predecessor-id="3" type="FS"/>
         </predecessors>
       </task>
-      <task id="6" name="[F-1-50] - OpenCL-Platform Detektor" note="" work="10800" start="20160817T000000Z" end="20160817T110000Z" work-start="20160817T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
+      <task id="6" name="[F-1-50] - OpenCL-Platform Detektor" note="" work="28800" start="20160817T000000Z" end="20160822T170000Z" work-start="20160817T080000Z" percent-complete="100" priority="0" type="normal" scheduling="fixed-work"/>
     </task>
-    <task id="7" name="[F-2] - Runtime/Compile-time Dispatcher" note="" work="10800" start="20160817T000000Z" end="20160906T140500Z" work-start="20160817T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
-      <task id="8" name="[F-2-10] - Typverteiler um OpenCL Zweig erweitern" note="" work="3600" start="20160906T130500Z" end="20160906T140500Z" work-start="20160906T130500Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+    <task id="7" name="[F-2] - Runtime/Compile-time Dispatcher" note="" work="43200" start="20160907T130500Z" end="20160909T130500Z" work-start="20160907T130500Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+      <task id="8" name="[F-2-10] - Typverteiler um OpenCL Zweig erweitern" note="" work="14400" start="20160907T130500Z" end="20160909T130500Z" work-start="20160907T130500Z" percent-complete="100" priority="0" type="normal" scheduling="fixed-work">
         <predecessors>
           <predecessor id="1" predecessor-id="2" type="FS"/>
           <predecessor id="1" predecessor-id="3" type="FS"/>
@@ -42,7 +42,7 @@
           <predecessor id="1" predecessor-id="6" type="FS"/>
         </predecessors>
       </task>
-      <task id="9" name="[F-2-20] - Instruktionsverteiler um OpenCL Zweig erweitern" note="" work="3600" start="20160906T130500Z" end="20160906T140500Z" work-start="20160906T130500Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+      <task id="9" name="[F-2-20] - Instruktionsverteiler um OpenCL Zweig erweitern" note="" work="14400" start="20160907T130500Z" end="20160909T130500Z" work-start="20160907T130500Z" percent-complete="100" priority="0" type="normal" scheduling="fixed-work">
         <predecessors>
           <predecessor id="1" predecessor-id="2" type="FS"/>
           <predecessor id="1" predecessor-id="3" type="FS"/>
@@ -51,7 +51,11 @@
           <predecessor id="1" predecessor-id="6" type="FS"/>
         </predecessors>
       </task>
-      <task id="10" name="[F-2-30] - Buildsystem um OpenCL-Zweig erweitern" note="" work="3600" start="20160817T000000Z" end="20160817T090000Z" work-start="20160817T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
+      <task id="10" name="[F-2-30] - Buildsystem um OpenCL-Zweig erweitern" note="" work="14400" start="20160907T130500Z" end="20160909T130500Z" work-start="20160907T130500Z" percent-complete="100" priority="0" type="normal" scheduling="fixed-work">
+        <predecessors>
+          <predecessor id="1" predecessor-id="1" type="FS"/>
+        </predecessors>
+      </task>
     </task>
     <task id="11" name="[F-3] - Basisoperatoren" note="" work="46800" start="20160817T000000Z" end="20160817T170000Z" work-start="20160817T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
       <task id="12" name="[F-3-10] - Addition" note="" work="3600" start="20160817T000000Z" end="20160817T100000Z" work-start="20160817T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
@@ -84,7 +88,7 @@
         <task id="26" name="[F-3-66] - Kleiner-Gleich" note="" work="3600" start="20160817T000000Z" end="20160817T090000Z" work-start="20160817T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
       </task>
     </task>
-    <task id="27" name="[F-4] - Basisfunktionen" note="" work="288000" start="20160817T000000Z" end="20160818T170000Z" work-start="20160817T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+    <task id="27" name="[F-4] - Basisfunktionen" note="" work="288000" start="20160817T000000Z" end="20160819T170000Z" work-start="20160817T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
       <task id="28" name="[F-4-10] - Rundung zum n&#xE4;chsten Ganzzahlwert" note="" work="28800" start="20160817T000000Z" end="20160817T170000Z" work-start="20160817T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
       <task id="29" name="[F-4-20] - Rundung zum n&#xE4;chsth&#xF6;heren Ganzzahlwert" note="" work="28800" start="20160817T000000Z" end="20160817T170000Z" work-start="20160817T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
       <task id="30" name="[F-4-30] - Rundung zum n&#xE4;chstniedrigeren Ganzzahlwert" note="" work="28800" start="20160817T000000Z" end="20160817T170000Z" work-start="20160817T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
@@ -93,18 +97,18 @@
       <task id="33" name="[F-4-60] - Minimalwert" note="" work="28800" start="20160817T000000Z" end="20160817T170000Z" work-start="20160817T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
       <task id="34" name="[F-4-70] - Maximalwert" note="" work="28800" start="20160817T000000Z" end="20160817T170000Z" work-start="20160817T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
       <task id="35" name="[F-4-80] - Selektion (if-then-else)" note="" work="28800" start="20160817T000000Z" end="20160817T170000Z" work-start="20160817T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
-      <task id="36" name="[F-4-90] - Speicherzugriffe" note="" work="57600" start="20160817T170000Z" end="20160818T170000Z" work-start="20160818T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+      <task id="36" name="[F-4-90] - Speicherzugriffe" note="" work="57600" start="20160818T170000Z" end="20160819T170000Z" work-start="20160819T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
         <predecessors>
           <predecessor id="1" predecessor-id="3" type="FS"/>
           <predecessor id="1" predecessor-id="2" type="FS"/>
         </predecessors>
-        <task id="37" name="[F-4-91] - Vektorisierte Werte auslesen" note="" work="28800" start="20160817T170000Z" end="20160818T170000Z" work-start="20160818T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+        <task id="37" name="[F-4-91] - Vektorisierte Werte auslesen" note="" work="28800" start="20160818T170000Z" end="20160819T170000Z" work-start="20160819T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
           <predecessors>
             <predecessor id="1" predecessor-id="3" type="FS"/>
             <predecessor id="1" predecessor-id="2" type="FS"/>
           </predecessors>
         </task>
-        <task id="38" name="[F-4-92] - Doppelt indirekte Speicherzugriffe" note="" work="28800" start="20160817T170000Z" end="20160818T170000Z" work-start="20160818T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+        <task id="38" name="[F-4-92] - Doppelt indirekte Speicherzugriffe" note="" work="28800" start="20160818T170000Z" end="20160819T170000Z" work-start="20160819T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
           <predecessors>
             <predecessor id="1" predecessor-id="3" type="FS"/>
             <predecessor id="1" predecessor-id="2" type="FS"/>
@@ -149,15 +153,15 @@
     <allocation task-id="13" resource-id="1" units="50"/>
     <allocation task-id="11" resource-id="1" units="100"/>
     <allocation task-id="12" resource-id="1" units="50"/>
-    <allocation task-id="10" resource-id="2" units="100"/>
+    <allocation task-id="10" resource-id="2" units="25"/>
     <allocation task-id="7" resource-id="2" units="100"/>
     <allocation task-id="1" resource-id="2" units="25"/>
     <allocation task-id="2" resource-id="2" units="25"/>
     <allocation task-id="3" resource-id="2" units="25"/>
     <allocation task-id="4" resource-id="2" units="25"/>
     <allocation task-id="5" resource-id="2" units="25"/>
-    <allocation task-id="6" resource-id="2" units="100"/>
-    <allocation task-id="9" resource-id="2" units="100"/>
-    <allocation task-id="8" resource-id="2" units="100"/>
+    <allocation task-id="6" resource-id="2" units="25"/>
+    <allocation task-id="9" resource-id="2" units="25"/>
+    <allocation task-id="8" resource-id="2" units="25"/>
   </allocations>
 </project>
