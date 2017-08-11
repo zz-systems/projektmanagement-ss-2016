@@ -38,9 +38,7 @@ global result;
 global fileCount;
 
 fileCount = 0;
-result.image(0) = '';
-result.lbpOclTime(0) = 0;
-result.lbpHwTime(0) = 0;
+result = struct([]);
 currentImage = 'empty';
                
 if nargin && ischar(varargin{1})
