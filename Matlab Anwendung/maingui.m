@@ -22,7 +22,7 @@ function varargout = maingui(varargin)
 
 % Edit the above text to modify the response to help maingui
 
-% Last Modified by GUIDE v2.5 10-Aug-2017 16:43:53
+% Last Modified by GUIDE v2.5 11-Aug-2017 15:27:14
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -34,7 +34,13 @@ gui_State = struct('gui_Name',       mfilename, ...
                    'gui_Callback',   []);
                
 global currentImage;
+global result;
+global fileCount;
 
+fileCount = 0;
+result.image(0) = '';
+result.lbpOclTime(0) = 0;
+result.lbpHwTime(0) = 0;
 currentImage = 'empty';
                
 if nargin && ischar(varargin{1})
@@ -91,31 +97,41 @@ imagesc(currentImage, 'Parent', handles.axes1);
 axis off;
 
 
-% --- Executes on button press in btnSend1.
-function btnSend1_Callback(hObject, eventdata, handles)
-% hObject    handle to btnSend1 (see GCBO)
+% --- Executes on button press in btnSendOcl.
+function btnSendOcl_Callback(hObject, eventdata, handles)
+% hObject    handle to btnSendOcl (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 global currentImage;
+global result;
+global fileCount;
 if currentImage == 'empty'
     msgbox('Please open file and do grayscale first!');
 else
     % time measurement of function below
-    result = handles.com.openCl(currentImage);
+    tic;
+    result.image(fileCount) = handles.com.openCl(currentImage);
+    result.lbpOclTime(fileCount) = toc;
+    fileCount = fileCount + 1;
 end
 
 
-% --- Executes on button press in btnSend2.
-function btnSend2_Callback(hObject, eventdata, handles)
-% hObject    handle to btnSend2 (see GCBO)
+% --- Executes on button press in btnSendHw.
+function btnSendHw_Callback(hObject, eventdata, handles)
+% hObject    handle to btnSendHw (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 global currentImage;
+global result;
+global fileCount;
 if currentImage == 'empty'
     msgbox('Please open file and do grayscale first!');
 else
     % time measurement of function below
-    result = handles.com.vhdlHardware(currentImage);
+    tic;
+    result.image(fileCount) = handles.com.vhdlHardware(currentImage);
+    result.lbpHwTime(fileCount) = toc;
+    fileCount = fileCount + 1;
 end
 
 
