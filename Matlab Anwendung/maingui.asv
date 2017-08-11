@@ -35,7 +35,7 @@ gui_State = struct('gui_Name',       mfilename, ...
                
 global currentImage;
 
-currentImage = 'empty';
+currentImage = '';
                
 if nargin && ischar(varargin{1})
     gui_State.gui_Callback = str2func(varargin{1});
@@ -60,7 +60,6 @@ function maingui_OpeningFcn(hObject, eventdata, handles, varargin)
 % Choose default command line output for maingui
 handles.output = hObject;
 handles.core = ImgCore();
-handles.com = BoardCom();
 
 % Update handles structure
 guidata(hObject, handles);
@@ -85,9 +84,8 @@ function btnGrayscale_Callback(hObject, eventdata, handles)
 % hObject    handle to btnGrayscale (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-global currentImage;
+
 currentImage = handles.core.grayscale();
-imagesc(currentImage, 'Parent', handles.axes1);
 axis off;
 
 
@@ -96,13 +94,6 @@ function btnSend1_Callback(hObject, eventdata, handles)
 % hObject    handle to btnSend1 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-global currentImage;
-if currentImage == 'empty'
-    msgbox('Please open file and do grayscale first!');
-else
-    % time measurement of function below
-    result = handles.com.openCl(currentImage);
-end
 
 
 % --- Executes on button press in btnSend2.
@@ -110,13 +101,6 @@ function btnSend2_Callback(hObject, eventdata, handles)
 % hObject    handle to btnSend2 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-global currentImage;
-if currentImage == 'empty'
-    msgbox('Please open file and do grayscale first!');
-else
-    % time measurement of function below
-    result = handles.com.vhdlHardware(currentImage);
-end
 
 
 % --- Executes on button press in btnResult.
