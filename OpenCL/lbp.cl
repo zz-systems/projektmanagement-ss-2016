@@ -43,6 +43,7 @@ kernel void lbp(
         float2 fpos = spoints[i];
         int2 ipos = {my_round(fpos.x), my_round(fpos.y)};//(int2)round(fpos);
 
+        // memory access violations occured with native round.
         if(index + ipos.y * w + ipos.x > w * h)
             printf("dim: %i, iposx: %i, iposy: %i, fposx: %f, fposy: %f, offset: %i, index: %i\n",
             w * h,
@@ -53,7 +54,7 @@ kernel void lbp(
         float current_value = in[index + ipos.y * w + ipos.x];
 
         // Check if interpolation is needed.
-		/*if( (abs_diff( fpos.x, ipos.x ) > 1e-6)
+		if( (abs_diff( fpos.x, ipos.x ) > 1e-6)
          || (abs_diff( fpos.y, ipos.y ) > 1e-6) )
         {
             int2 ff = (int2)floor(fpos);
@@ -76,7 +77,7 @@ kernel void lbp(
                             + in[idxV2] * w2
                             + in[idxV3] * w3
                             + in[idxV4] * w4;
-        }*/
+        }
 
         value += current_value - threshold >= 0 ? pow(2.0f, i) : 0;
     }
