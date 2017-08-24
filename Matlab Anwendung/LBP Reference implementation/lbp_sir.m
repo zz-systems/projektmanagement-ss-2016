@@ -1,4 +1,5 @@
 function result = lbp_sir(varargin)
+
 narginchk(1,5);
 image=varargin{1};
 d_image=double(image);
@@ -9,6 +10,7 @@ end
 if (nargin == 2) && (length(varargin{2}) == 1)
     error('Input arguments!');
 end
+
 if (nargin > 2) && (length(varargin{2}) == 1)
     radius=varargin{2};
     neighbors=varargin{3};
@@ -42,6 +44,7 @@ if (nargin > 1) && (length(varargin{2}) > 1)
         mode='h';
     end
 end
+
 % Steps to determine the dimensions of input image
 [ysize, xsize] = size(image);
 neighbors=size(spoints,1);
@@ -49,41 +52,55 @@ miny=min(spoints(:,1));
 maxy=max(spoints(:,1));
 minx=min(spoints(:,2));
 maxx=max(spoints(:,2));
-% Steps to define a block size, where each LBP code is computed within a % block of size bsizey*bsizex
-bsizey=ceil(max(maxy,0))-floor(min(miny,0))+1; bsizex=ceil(max(maxx,0))-floor(min(minx,0))+1;
+
+% Steps to define a block size, where each LBP code is computed within a 
+% block of size bsizey*bsizex
+bsizey=ceil(max(maxy,0))-floor(min(miny,0))+1; 
+bsizex=ceil(max(maxx,0))-floor(min(minx,0))+1;
+
 % To assign the coordinates of origin (0,0) in the block
 origy=1-floor(min(miny,0));
 origx=1-floor(min(minx,0));
+
 % Minimum allowed size for the input image depends on the radius of the used LBP operator
 if(xsize < bsizex || ysize < bsizey)
     error('Input image too small for recognition. Dimensions should be at least (2*radius+1) x (2*radius+1)');
 end
+
 % To calculate dx and dy
 dx = xsize - bsizex;
 dy = ysize - bsizey;
+
 % To fill the center pixel matrix C
 C = image(origy:origy+dy,origx:origx+dx); d_C = double(C);
 bins = 2^neighbors;
+
 % To initialize the result matrix with zeros
 result=zeros(dy+1,dx+1);
+
 %To compute the LBP code image
 for i = 1:neighbors
     y = spoints(i,1)+origy;
     x = spoints(i,2)+origx;
+    
     % Calculation of floors, ceils and rounds for x and y
     fy = floor(y); cy = ceil(y); ry = round(y);
     fx = floor(x); cx = ceil(x); rx = round(x);
-    % If interpolation is not needed, use original datatypes otherwise % use double type images
+    
+    % If interpolation is not needed, use original datatypes otherwise
+    % use double type images
     if (abs(x - rx) < 1e-6) && (abs(y - ry) < 1e-6)
         N = image(ry:ry+dy,rx:rx+dx);
         D = N >= C; else
         ty = y - fy;
         tx = x - fx;
+        
         % Calculate the interpolation weights
         w1 = (1 - tx) * (1 - ty);
         w2= tx *(1-ty);
         w3 = (1 - tx) * ty ;
         w4= tx* ty;
+        
         % Compute interpolated pixel values
         N = w1*d_image(fy:fy+dy,fx:fx+dx) + w2*d_image(fy:fy+dy,cx:cx+dx) + w3*d_image(cy:cy+dy,fx:fx+dx) + w4*d_image(cy:cy+dy,cx:cx+dx);
         D = N >= d_C;
@@ -92,6 +109,7 @@ for i = 1:neighbors
     v = 2^(i-1);
     result = result + v*D;
 end
+
 % Apply mapping if it is defined
 if length(mapping) > 1
     bins = max(max(mapping)) + 1;
@@ -101,6 +119,7 @@ if length(mapping) > 1
         end
     end
 end
+
 if (strcmp(mode,'h') || strcmp(mode,'hist') || strcmp(mode,'nh'))
     % Return with LBP histogram if mode equals 'hist'
     result=hist(result(:),0:(bins-1));

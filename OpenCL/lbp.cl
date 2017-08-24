@@ -44,13 +44,13 @@ kernel void lbp(
         int2 ipos = {my_round(fpos.x), my_round(fpos.y)};//(int2)round(fpos);
 
         // memory access violations occured with native round.
-        if(index + ipos.y * w + ipos.x > w * h)
+        /*if(index + ipos.y * w + ipos.x > w * h)
             printf("dim: %i, iposx: %i, iposy: %i, fposx: %f, fposy: %f, offset: %i, index: %i\n",
             w * h,
             ipos.x, ipos.y,
             fpos.x, fpos.y,
             index,  index + ipos.y * w + ipos.x);
-
+        */
         float current_value = in[index + ipos.y * w + ipos.x];
 
         // Check if interpolation is needed.
