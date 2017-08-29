@@ -14,7 +14,6 @@ classdef ImgCore < handle
        end
        
        function displayRawImage(self, target)
-           self.rawImage = imresize(self.rawImage, [256 256]);
            imagesc(self.rawImage, 'Parent', target);
        end
        
@@ -26,6 +25,19 @@ classdef ImgCore < handle
            lum = self.rawImage(:, :, 1) * .2126 + self.rawImage(:, :, 2) * .7152 + self.rawImage(:, :, 3) * .0722;
             
            gs = cat(3, lum, lum, lum);
+           gs = imresize(gs,[256 256]);
+       end
+       
+       function relErr = relativError(img1, img2)
+           % Returns relative Error in percent
+           for i = 0:255
+               if img1(i)>=img2(i)
+                   relErr = relErr + (img1 - img2);
+               else
+                   relErr = relErr + (img2 - img1);
+               end
+           end
+           relErr = relErr * 100 / sum(img1);
        end
    end
 end

@@ -22,7 +22,7 @@ function varargout = maingui(varargin)
 
 % Edit the above text to modify the response to help maingui
 
-% Last Modified by GUIDE v2.5 29-Aug-2017 11:26:49
+% Last Modified by GUIDE v2.5 29-Aug-2017 14:16:37
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -36,11 +36,6 @@ gui_State = struct('gui_Name',       mfilename, ...
 
 addpath('LBP Reference implementation');
 
-global currentImage;
-global fileCount;
-
-currentImage = [0,0,0];
-fileCount = 1;
 
                
 if nargin && ischar(varargin{1})
@@ -67,6 +62,12 @@ function maingui_OpeningFcn(hObject, eventdata, handles, varargin)
 handles.output = hObject;
 handles.core = ImgCore();
 handles.com = BoardCom();
+
+global fileCount;
+global currentImage;
+
+fileCount = 0;
+currentImage = [0,0];
 
 % Update handles structure
 guidata(hObject, handles);
@@ -110,9 +111,8 @@ if isempty(currentImage)
 else
     % time measurement of function below
     tic;
-    result(fileCount).image = handles.com.openCl(currentImage);
+    result(fileCount).oclImage = handles.com.openCl(currentImage);
     result(fileCount).lbpOclTime = toc;
-    fileCount = fileCount + 1;
 end
 
 
@@ -129,9 +129,8 @@ if isempty(currentImage)
 else
     % time measurement of function below
     tic;
-    result(fileCount).image = handles.com.vhdlHardware(currentImage);
+    result(fileCount).hwImage = handles.com.vhdlHardware(currentImage);
     result(fileCount).lbpHwTime = toc;
-    fileCount = fileCount + 1;
 end
 
 
@@ -147,7 +146,11 @@ function btnOpen_Callback(hObject, eventdata, handles)
 % hObject    handle to btnOpen (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+global fileCount;
 handles.core.openImage();
+fileCount = fileCount + 1;
+disp(fileCount);
+set(handles.txtFileCount,'String',fileCount);
 handles.core.displayRawImage(handles.axes1);
 axis off;
 
@@ -161,6 +164,5 @@ global currentImage;
 global result;
 global fileCount;
 tic;
-result(fileCount).image = lbp_sir(imresize(currentImage, [256 256]));
-result(fileCount).mLTime = toc;
-handles.core.displayImage((result(fileCount).image), handles.axes1);
+result(fileCount).mlImage = lbp_sir(imresize(currentImage, [256 256]));
+result(fileCount).lbpMlTime = toc;
