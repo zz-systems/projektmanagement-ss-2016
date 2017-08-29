@@ -69,6 +69,8 @@ global currentImage;
 fileCount = 0;
 currentImage = [0,0];
 
+clearvars -global result;
+
 % Update handles structure
 guidata(hObject, handles);
 
@@ -139,6 +141,8 @@ function btnResult_Callback(hObject, eventdata, handles)
 % hObject    handle to btnResult (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+global result;
+resultgui(result);
 
 
 % --- Executes on button press in btnOpen.
@@ -149,7 +153,6 @@ function btnOpen_Callback(hObject, eventdata, handles)
 global fileCount;
 handles.core.openImage();
 fileCount = fileCount + 1;
-disp(fileCount);
 set(handles.txtFileCount,'String',fileCount);
 handles.core.displayRawImage(handles.axes1);
 axis off;
@@ -166,3 +169,5 @@ global fileCount;
 tic;
 result(fileCount).mlImage = lbp_sir(imresize(currentImage, [256 256]));
 result(fileCount).lbpMlTime = toc;
+img = result(fileCount).mlImage;
+disp(handles.core.relError(img,img));

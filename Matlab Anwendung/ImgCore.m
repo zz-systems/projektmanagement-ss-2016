@@ -28,16 +28,17 @@ classdef ImgCore < handle
            gs = imresize(gs,[256 256]);
        end
        
-       function relErr = relativError(img1, img2)
+       function relErr = relError(self, img1, img2)
            % Returns relative Error in percent
-           for i = 0:255
+           re = 0;
+           for i = 1:255
                if img1(i)>=img2(i)
-                   relErr = relErr + (img1 - img2);
+                   re = re + (img1(i) - img2(i));
                else
-                   relErr = relErr + (img2 - img1);
+                   re = re + (img2(i) - img1(i));
                end
            end
-           relErr = relErr * 100 / sum(img1);
+           relErr = re * 100 / sum(img1);
        end
    end
 end
