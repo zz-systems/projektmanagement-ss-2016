@@ -122,7 +122,7 @@ end
 
 if (strcmp(mode,'h') || strcmp(mode,'hist') || strcmp(mode,'nh'))
     % Return with LBP histogram if mode equals 'hist'
-    result=hist(result(:),0:(bins-1));
+    result=hist(result(:),0:(bins-1)); %bins-1 = 255 with 1 input arg
     if (strcmp(mode,'nh'))
         result=result/sum(result);
     end

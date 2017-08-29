@@ -14,7 +14,12 @@ classdef ImgCore < handle
        end
        
        function displayRawImage(self, target)
+           self.rawImage = imresize(self.rawImage, [256 256]);
            imagesc(self.rawImage, 'Parent', target);
+       end
+       
+       function displayImage(img, target)
+           imagesc(img, 'Parent', target);
        end
        
        function gs = grayscale(self)

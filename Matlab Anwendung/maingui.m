@@ -22,7 +22,7 @@ function varargout = maingui(varargin)
 
 % Edit the above text to modify the response to help maingui
 
-% Last Modified by GUIDE v2.5 11-Aug-2017 15:27:14
+% Last Modified by GUIDE v2.5 29-Aug-2017 11:26:49
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -33,13 +33,15 @@ gui_State = struct('gui_Name',       mfilename, ...
                    'gui_LayoutFcn',  [] , ...
                    'gui_Callback',   []);
                
+
+addpath('LBP Reference implementation');
+
 global currentImage;
-global result;
 global fileCount;
 
-fileCount = 0;
-result = struct([]);
-currentImage = 'empty';
+currentImage = [0,0,0];
+fileCount = 1;
+
                
 if nargin && ischar(varargin{1})
     gui_State.gui_Callback = str2func(varargin{1});
@@ -103,13 +105,13 @@ function btnSendOcl_Callback(hObject, eventdata, handles)
 global currentImage;
 global result;
 global fileCount;
-if currentImage == 'empty'
+if isempty(currentImage)
     msgbox('Please open file and do grayscale first!');
 else
     % time measurement of function below
     tic;
-    result.image(fileCount) = handles.com.openCl(currentImage);
-    result.lbpOclTime(fileCount) = toc;
+    result(fileCount).image = handles.com.openCl(currentImage);
+    result(fileCount).lbpOclTime = toc;
     fileCount = fileCount + 1;
 end
 
@@ -122,13 +124,13 @@ function btnSendHw_Callback(hObject, eventdata, handles)
 global currentImage;
 global result;
 global fileCount;
-if currentImage == 'empty'
+if isempty(currentImage)
     msgbox('Please open file and do grayscale first!');
 else
     % time measurement of function below
     tic;
-    result.image(fileCount) = handles.com.vhdlHardware(currentImage);
-    result.lbpHwTime(fileCount) = toc;
+    result(fileCount).image = handles.com.vhdlHardware(currentImage);
+    result(fileCount).lbpHwTime = toc;
     fileCount = fileCount + 1;
 end
 
@@ -148,3 +150,17 @@ function btnOpen_Callback(hObject, eventdata, handles)
 handles.core.openImage();
 handles.core.displayRawImage(handles.axes1);
 axis off;
+
+
+% --- Executes on button press in btnLbpMatlab.
+function btnLbpMatlab_Callback(hObject, eventdata, handles)
+% hObject    handle to btnLbpMatlab (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+global currentImage;
+global result;
+global fileCount;
+tic;
+result(fileCount).image = lbp_sir(imresize(currentImage, [256 256]));
+result(fileCount).mLTime = toc;
+handles.core.displayImage((result(fileCount).image), handles.axes1);

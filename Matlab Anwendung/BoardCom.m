@@ -11,6 +11,12 @@ classdef BoardCom < handle
           % img contains the grayscale image
           % lbp should contain the processed image and is saved in maingui
           % as return value
+          if isempty(img)
+              disp("No image found!");
+          else
+              disp("Image found!");
+          end
+          lbp = img;
        end
        
        function lbp = vhdlHardware(self, img)
@@ -18,6 +24,12 @@ classdef BoardCom < handle
            % img contains the grayscale image
            % lbp should contain the processed image and is saved in maingui
            % as return value
+           if isempty(img)
+               disp("No image found!");
+           else
+               disp("Image found!");
+           end
+           lbp = img;
        end
    end
 end
