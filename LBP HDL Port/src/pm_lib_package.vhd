@@ -1,25 +1,31 @@
 library ieee;
     use ieee.std_logic_1164.all;
-    use ieee.std_logic_unsigned.all;
+    use ieee.numeric_std.all;
 
 
 package pm_lib is
-begin
     -- types -------------------------------------------------------------------
     subtype byte_t is std_logic_vector(7 downto 0);
     subtype word_t is std_logic_vector(16 downto 0);
 
-    type byte_array_t   is array(natural range<>) of byte_t;
-    type byte_array2d_t is array(natural range<>, natural range<>) of byte_t;
-    type byte_array3d_t is array(natural range<>, natural range<>, natural range<>) of byte_t;
+    type byte_array_t   is array(integer range<>) of byte_t;
+    type byte_array2d_t is array(integer range<>) of byte_array_t;
+    type byte_array3d_t is array(integer range<>) of byte_array2d_t;
 
     type word_array_t   is array(natural range<>) of word_t;
+    
+    type int_array_t    is array(natural range<>) of integer;
 
     -- commands ----------------------------------------------------------------
     type commands    is (init, ack, ttd, proc, tth, invop);
 
     function decode_cmd(raw_cmd : byte_t) return commands;
     function encode_cmd(cmd : commands) return byte_t;
+
+    -- conversion --------------------------------------------------------------
+    function to_std_logic(L: BOOLEAN) return std_ulogic;
+
+    function to_uint_array(L : word_array_t) return int_array_t;
 
     -- components --------------------------------------------------------------    
     component lbp_operator is
@@ -49,7 +55,7 @@ begin
 
         col, row : out word_t;
 
-        din : in byte_array2d_t(-window_size to window_size, -window_size to window_size);
+        din : in byte_array2d_t(-radius to radius)(-radius to radius);
         dout : out byte_t;
 
         busy : out std_logic
@@ -75,8 +81,9 @@ begin
         row_addr    : out word_array_t      (kernels_x * kernels_y - 1 downto 0);
         col_addr    : out word_array_t      (kernels_x * kernels_y - 1 downto 0);
 
-        din         : in byte_array_t       (kernels_x * kernels_y - 1 downto 0);
-        dout        : out byte_array_t      (kernels_x * kernels_y - 1 downto 0)
+        din         : in byte_array3d_t     (kernels_x * kernels_y - 1 downto 0)(-radius to radius)(-radius to radius);
+        dout        : out byte_array_t      (kernels_x * kernels_y - 1 downto 0);
+        busy        : out std_logic
     );
     end component;
 
@@ -101,7 +108,7 @@ begin
         we      : in std_logic_vector   (ports - 1 downto 0);
 
         din     : in byte_array_t       (ports - 1 downto 0);
-        dout    : out byte_array3d_t    (ports - 1 downto 0, -radius to radius, -radius to radius)
+        dout    : out byte_array3d_t    (ports - 1 downto 0)(-radius to radius)(-radius to radius)
     );
     end component;
 
@@ -174,8 +181,8 @@ begin
         mem_we          : out std_logic;
 
         -- host interface ----------------------------------------------------------
-        host_din        : in std_logic;
-        host_dout       : out std_logic;
+        host_din        : in byte_t;
+        host_dout       : out byte_t;
         host_we         : out std_logic;
         host_davail     : in std_logic;
         host_busy       : in std_logic;
@@ -211,7 +218,6 @@ begin
 end package;
 
 package body pm_lib is 
-begin
     function decode_cmd(raw_cmd : byte_t) return commands is     
     begin
         case raw_cmd is 
@@ -237,4 +243,25 @@ begin
             when invop  => return x"00";
         end case;
     end function;
+
+    function to_std_logic(L: BOOLEAN) return std_ulogic is
+    begin
+        if L then
+            return('1');
+        else
+            return('0');
+        end if;
+    end function to_std_logic;
+
+    function to_uint_array(L : word_array_t) 
+        return int_array_t is
+        variable result : int_array_t(L'range);
+    begin
+        for i in L'range loop
+            result(i) := to_integer(unsigned(L(i)));
+        end loop;
+
+        return result;
+    end function;
+
 end package body;

@@ -1,6 +1,7 @@
 library ieee;
     use ieee.std_logic_1164.all;
-    use ieee.std_logic_unsigned.all;
+	use ieee.numeric_std.all;
+
 
 library work;
     use work.pm_lib.all;
@@ -29,24 +30,29 @@ port
 end pu_local_output_memory;
 
 architecture rtl of pu_local_output_memory is
-    signal mem : byte_array2d_t(0 to mem_w, 0 to mem_h);
+    signal mem : byte_array_t(0 to mem_w * mem_h - 1);
+    
+    signal icol : int_array_t(col'range);
+    signal irow : int_array_t(row'range);
 begin
 
-    process(clk, rst)
-    begin
-        if rst then
-            mem     <= (others => '0');
-            dout    <= (others => '0');
-        elsif rising_edge(clk) then
-
-            for i in ports - 1 downto 0 loop
-            begin
+    icol <= to_uint_array(col);
+    irow <= to_uint_array(row);
+    
+    GPORT : for i in ports - 1 downto 0 generate  
+        process(clk, rst)
+        begin
+            if rst then
+                mem     <= (others => (others => '0'));
+                dout    <= (others => (others => '0'));
+            elsif rising_edge(clk) then 
+            
                 if we(i) then
-                    mem(col(i), row(i)) <= din(i);
+                    mem(irow(i) * mem_w + icol(i)) <= din(i);
                 end if;
 
-                dout(i) <= mem(col(i), row(i));
-            end loop;
-        end if;
-    end process;
+                dout(i) <= mem(irow(i) * mem_w + icol(i));
+            end if;
+        end process;
+    end generate;
 end rtl;

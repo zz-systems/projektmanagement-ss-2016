@@ -4,7 +4,7 @@ library ieee;
 
 library work;
     use work.pm_lib.all;
-
+    
 entity host_interface_uart is
 port
 (
@@ -27,7 +27,7 @@ end host_interface_uart;
 architecture rtl of host_interface_uart is
 begin
 
-    UART : uart 
+    IUART : entity work.uart 
     generic map
     (
         baud                => 115200,

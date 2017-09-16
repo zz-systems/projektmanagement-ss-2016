@@ -20,8 +20,8 @@ port
     mem_we          : out std_logic;
 
     -- host interface ----------------------------------------------------------
-    host_din        : in std_logic;
-    host_dout       : out std_logic;
+    host_din        : in byte_t;
+    host_dout       : out byte_t;
     host_we         : out std_logic;
     host_davail     : in std_logic;
     host_busy       : in std_logic;
@@ -34,14 +34,11 @@ port
 end control_unit;
 
 architecture rtl of control_unit is
-    signal davail : std_logic;
-    signal data_rx, data_tx : byte_t;
-    signal tx_en, tx_busy : std_logic;
-    signal raw_cmd : byte_t;
-    signal cmd : commands;
+    type states is (listen, rcv_cmd_init, rcv_cmd_ttd, rcv_cmd_tth, rcv_cmd_proc, rcv_data, rcv_col_hi, rcv_col_lo, rcv_row_hi, rcv_row_lo, snd_cmd_ack, snd_data);
+    
+    signal state, ret_state, ret_ret_state : states;  
 
     signal col_addr, row_addr : word_t;
-    signal busy : std_logic;
 begin
 
     process(clk, rst)
@@ -97,10 +94,10 @@ begin
 
                 -- wait for incoming data --------------------------------------
                 when rcv_data => 
-                    if davail then
+                    if host_davail then
                         row         <= row_addr;
                         col         <= col_addr;                        
-                        dout        <= data_rx;
+                        mem_dout    <= host_din;
 
                         state       <= snd_cmd_ack;
                         ret_state   <= listen;
@@ -108,32 +105,32 @@ begin
 
                 -- wait for inbound address components -------------------------
                 when rcv_col_hi => 
-                    if davail then
-                        col_addr(15 downto 8) <= data_rx;
+                    if host_davail then
+                        col_addr(15 downto 8) <= host_din;
 
                         state       <= snd_cmd_ack;
                         ret_state   <= rcv_col_lo;
                     end if;
 
                 when rcv_col_lo => 
-                    if davail then
-                        col_addr(7 downto 0) <= data_rx;
+                    if host_davail then
+                        col_addr(7 downto 0) <= host_din;
 
                         state       <= snd_cmd_ack;
                         ret_state   <= rcv_row_hi;
                     end if;
 
                 when rcv_row_hi => 
-                    if davail then
-                        row_addr(15 downto 8) <= data_rx;
+                    if host_davail then
+                        row_addr(15 downto 8) <= host_din;
 
                         state       <= snd_cmd_ack;
                         ret_state   <= rcv_row_lo;
                     end if;
 
                 when rcv_row_lo => 
-                    if davail then
-                        row_addr(7 downto 0) <= data_rx;
+                    if host_davail then
+                        row_addr(7 downto 0) <= host_din;
 
                         state       <= snd_cmd_ack;
                         ret_state   <= ret_ret_state;
@@ -141,7 +138,7 @@ begin
 
                 -- send acknowledge cmd to host --------------------------------
                 when snd_cmd_ack => 
-                    data_tx <= encode_cmd(ack);
+                    host_dout <= encode_cmd(ack);
                     host_we   <= '1';
 
                     if not host_busy then
@@ -150,7 +147,7 @@ begin
 
                 -- send data to host -------------------------------------------
                 when snd_data => 
-                    data_tx <= din;
+                    host_dout <= mem_din;
                     host_we <= '1';
 
                     if not host_busy then                        

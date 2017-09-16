@@ -1,7 +1,7 @@
 library ieee;
     use ieee.std_logic_1164.all;
-    use ieee.std_logic_unsigned.all;
-
+	use ieee.numeric_std.all;
+	 
 library work;
     use work.pm_lib.all;
 
@@ -17,23 +17,23 @@ entity lbp_operator is
     );
 end lbp_operator;
 
-architecture RTL of lbp_operator is
-    signal lbp, lbp_s : std_logic_vector(dout'range);
+architecture rtl of lbp_operator is
+    signal lbp, lbp_s : byte_t;
 begin
-    process(clk, reset)
+    process(clk, rst)
     begin
-        if reset then
+        if rst then
             lbp <= (others => '0');
         elsif rising_edge(clk) then
             lbp <= lbp_s;
         end if;
-    end;
+    end process;
 
-    lbp : for i in lbp'range generate
+    GLBP : for i in lbp'range generate
     begin
-        lbp_s(i) <= neighborhood(i) >= center;
+        lbp_s(i) <= to_std_logic(unsigned(neighborhood(i)) >= unsigned(center));
     end generate;
 
     dout <= lbp;
 
-end RTL;
+end rtl;

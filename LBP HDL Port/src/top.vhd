@@ -6,7 +6,7 @@ library work;
     use work.pm_lib.all;
 
 
-entity lbp_top_level is  
+entity top is  
 port 
 (
 	clk : in std_logic;
@@ -15,10 +15,10 @@ port
 	rx : in std_logic;
 	tx : out std_logic
 );
-end lbp_top_level;
+end top;
 
 
-architecture rtl of lbp_top_level is
+architecture rtl of top is
 	-- generic config
 	constant cols : integer := 256;
 	constant rows : integer := 256;
@@ -32,9 +32,9 @@ architecture rtl of lbp_top_level is
 	-- host interface ----------------------------------------------------------
 	signal host_din 	: byte_t;
 	signal host_dout 	: byte_t;
-	signal host_we 		: boolean;
-	signal host_davail 	: boolean;
-	signal host_busy	: boolean;
+	signal host_we 		: std_logic;
+	signal host_davail 	: std_logic;
+	signal host_busy	: std_logic;
 
 	-- memory interface --------------------------------------------------------
 	signal mem_row    	:  word_t;
@@ -42,12 +42,12 @@ architecture rtl of lbp_top_level is
 
 	signal mem_din 		:  byte_t;
 	signal mem_dout 	:  byte_t;
-	signal mem_we 		:  boolean; 
+	signal mem_we 		:  std_logic; 
 
 	-- processing unit control signals -----------------------------------------
-	signal pu_reset		: boolean;
-	signal pu_enable	: boolean;
-	signal pu_busy		: boolean;
+	signal pu_reset		: std_logic;
+	signal pu_enable	: std_logic;
+	signal pu_busy		: std_logic;
 
 begin
 

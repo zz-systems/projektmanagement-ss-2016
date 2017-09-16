@@ -1,3 +1,3 @@
-[submodule "LBP HDL Port/Third party/uart"]
-	path = LBP HDL Port/Third party/uart
+[submodule "LBP HDL Port/src/Third party/uart"]
+	path = LBP HDL Port/src/Third party/uart
 	url = https://github.com/pabennett/uart.git
