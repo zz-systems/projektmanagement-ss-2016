@@ -96,7 +96,7 @@ classdef BoardCom < handle
            
            img_data = reshape(img_data, [256, 256]);
            
-           img = mat2gray(array2d);
+           img = mat2gray(img_data);
        end
    end
 end
