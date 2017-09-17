@@ -11,7 +11,7 @@ classdef BoardCom < handle
    end
    
    methods(Access = public)
-       function [lbp, duration] = openCl(self, img)
+       function [lbp, system_time, kernel_time] = openCl(self, img)
           % Function for openCl solution with LBP operator
           % img contains the grayscale image
           % lbp should contain the processed image and is saved in maingui
@@ -30,10 +30,10 @@ classdef BoardCom < handle
               self.tth([self.target_root, '/ocl_data/', name, '.res'], [name, '.res']);
           end
           %system('ssh root@192.168.0.123 "source ./init_opencl.sh;aocl program /dev/acl0 boardtest.aocx;./lbp_host"')
-          lbp = self.read_result_file([name, '.res']);
+          [lbp, system_time, kernel_time] = self.read_result_file([name, '.res']);
        end
        
-       function lbp = vhdlHardware(self, img)
+       function [lbp, system_time, kernel_time] = vhdlHardware(self, img)
            % Function for hardware solution of LBP operator
            % img contains the grayscale image
            % lbp should contain the processed image and is saved in maingui
@@ -49,9 +49,9 @@ classdef BoardCom < handle
               
                self.ttd(fname, [self.target_root, '/hw_data']);
                %self.cmd([self.cmd_aocl_init, sprintf(self.cmd_aocl_run, fname, 256, 256, 1, 8)]);
-               self.tth([self.target_root, '/hw_data/', name, '.res'], [name, '.res']);
+               self.tth([self.target_root, '/hw_data/', name, '.res'], [name, ext, '.res']);
            end
-           lbp = self.read_result_file([name, '.res']);
+           [lbp, system_time, kernel_time] = self.read_result_file([name, ext, '.res']);
        end
    end
    
@@ -87,16 +87,16 @@ classdef BoardCom < handle
            fclose(fileID);
        end
        
-       function img = read_result_file(~, filename)
+       function [img, system_time, kernel_time] = read_result_file(~, filename)
            fileID = fopen(filename,'r');
-           array1d = fread(fileID);                        
-           fclose(fileID);
+           system_time = fread(fileID, 1, 'float64');
+           kernel_time = fread(fileID, 1, 'float64');
+           img_data = fread(fileID);                        
+           fclose(fileID);           
            
-           array2d = reshape(array1d, [256, 256]);
+           img_data = reshape(img_data, [256, 256]);
            
            img = mat2gray(array2d);
-           
-           figure('Name', 'Processed data'), imshow(img);
        end
    end
 end
