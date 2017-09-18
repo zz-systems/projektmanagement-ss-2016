@@ -22,7 +22,7 @@ function varargout = maingui(varargin)
 
 % Edit the above text to modify the response to help maingui
 
-% Last Modified by GUIDE v2.5 29-Aug-2017 14:16:37
+% Last Modified by GUIDE v2.5 18-Sep-2017 16:52:19
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -89,50 +89,29 @@ function varargout = maingui_OutputFcn(hObject, eventdata, handles)
 varargout{1} = handles.output;
 
 
-% --- Executes on button press in btnGrayscale.
-function btnGrayscale_Callback(hObject, eventdata, handles)
-% hObject    handle to btnGrayscale (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-global currentImage;
-currentImage = handles.core.grayscale();
-imagesc(currentImage, 'Parent', handles.axes1);
-axis off;
-
-
-% --- Executes on button press in btnSendOcl.
-function btnSendOcl_Callback(hObject, eventdata, handles)
-% hObject    handle to btnSendOcl (see GCBO)
+% --- Executes on button press in btnLBPOperations.
+function btnLBPOperations_Callback(hObject, eventdata, handles)
+% hObject    handle to btnLBPOperations (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 global currentImage;
 global result;
 global fileCount;
 if isempty(currentImage)
-    msgbox('Please open file and do grayscale first!');
+    msgbox('Please open file first!');
 else
-    % time measurement of function below
-    tic;
-    result(fileCount).oclImage = handles.com.openCl(currentImage);
-    result(fileCount).lbpOclTime = toc;
-end
-
-
-% --- Executes on button press in btnSendHw.
-function btnSendHw_Callback(hObject, eventdata, handles)
-% hObject    handle to btnSendHw (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-global currentImage;
-global result;
-global fileCount;
-if isempty(currentImage)
-    msgbox('Please open file and do grayscale first!');
-else
-    % time measurement of function below
-    tic;
-    result(fileCount).hwImage = handles.com.vhdlHardware(currentImage);
-    result(fileCount).lbpHwTime = toc;
+    % start LBP with OpenCL solution
+    [result(fileCount).oclImage, result(fileCount).lbpOclTime, kernelTime] = handles.com.openCl(imresize(currentImage, [256 256]));
+    result(fileCount).lbpOclHist = hist(result(fileCount).oclImage(:),0:255);
+    
+    % start LBP with VHDL solution
+    [result(fileCount).hwImage, result(fileCount).lbpHwTime, kernelTime] = handles.com.vhdlHardware(imresize(currentImage, [256 256]));
+    result(fileCount).lbpHwHist = hist(result(fileCount).hwImage(:),0:255);
+    
+    % display both calculated LBP images on their axis
+    handles.core.displayImage(result(fileCount).hwImage, handles.axVHDL);
+    handles.core.displayImage(result(fileCount).oclImage, handles.axOCl);
+    axis off;
 end
 
 
@@ -151,23 +130,20 @@ function btnOpen_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 global fileCount;
+global currentImage;
+global result;
+
 handles.core.openImage();
 fileCount = fileCount + 1;
 set(handles.txtFileCount,'String',fileCount);
-handles.core.displayRawImage(handles.axes1);
-axis off;
+handles.core.displayRawImage(handles.axRef);
 
+% convert opened image to grayscale
+currentImage = handles.core.grayscale();
 
-% --- Executes on button press in btnLbpMatlab.
-function btnLbpMatlab_Callback(hObject, eventdata, handles)
-% hObject    handle to btnLbpMatlab (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-global currentImage;
-global result;
-global fileCount;
+% build lbp variant with given algorithm in matlab
 tic;
-result(fileCount).mlImage = lbp_sir(imresize(currentImage, [256 256]));
+[result(fileCount).mlImage,result(fileCount).mlHist] = lbp_sir(imresize(currentImage, [256 256]));
 result(fileCount).lbpMlTime = toc;
-img = result(fileCount).mlImage;
-disp(handles.core.relError(img,img));
+handles.core.displayImage(result(fileCount).mlImage, handles.axMatlabLBP);
+axis off;

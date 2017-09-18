@@ -17,7 +17,7 @@ classdef ImgCore < handle
            imagesc(self.rawImage, 'Parent', target);
        end
        
-       function displayImage(img, target)
+       function displayImage(self, img, target)
            imagesc(img, 'Parent', target);
        end
        

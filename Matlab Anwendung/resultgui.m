@@ -54,18 +54,23 @@ function resultgui_OpeningFcn(hObject, eventdata, handles, varargin)
 
 % Choose default command line output for resultgui
 handles.output = hObject;
+handles.core = ImgCore();
 
 [m,n] = size(varargin{1,1});
 col1=zeros(m,n);
 col2=zeros(m,n);
 col3=zeros(m,n);
+col4=zeros(m,n);
+col5=zeros(m,n);
 for i = 1:n
     col1(i) = varargin{1,1}(i).lbpOclTime;
     col2(i) = varargin{1,1}(i).lbpHwTime;
     col3(i) = varargin{1,1}(i).lbpMlTime;
+    col4(i) = handles.core.relError(varargin{1,1}(i).mlHist, varargin{1,1}(i).lbpOclHist);
+    col5(i) = handles.core.relError(varargin{1,1}(i).mlHist, varargin{1,1}(i).lbpHwHist);
 end
-colNames = {'OpenCl', 'VHDL', 'Matlab Reference'};
-set(handles.tblResult, 'Data', [col1',col2',col3'], 'ColumnName', colNames);
+colNames = {'OpenCl', 'VHDL', 'Matlab Reference', 'Relative Error Matlab/OpenCL', 'Relative Error Matlab/VHDL'};
+set(handles.tblResult, 'Data', [col1',col2',col3',col4',col5'], 'ColumnName', colNames);
 
 % Update handles structure
 guidata(hObject, handles);
