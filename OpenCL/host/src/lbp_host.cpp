@@ -28,14 +28,13 @@ scoped_array<scoped_aligned_ptr<cl_uchar> > output; // num_devices elements
 
 std::string filename;
 
-scoped_array<uint8_t> input_data;
+uint8_t *input_data;
 
 int32_t width;
 int32_t height;
 size_t problem_size;
 
-int32_t radius;
-int32_t samples;
+uint8_t radius;
 
 double system_time;
 double kernel_time;
@@ -94,7 +93,7 @@ void parse_args(int argc, char** argv)
 {
     char *end;
 
-    filename        = argv[1];
+    filename          = argv[1];
 
     width           = strtol(argv[2], &end, 10);
     height          = strtol(argv[3], &end, 10);
@@ -102,32 +101,51 @@ void parse_args(int argc, char** argv)
     problem_size    = width * height;
 
     radius          = strtol(argv[4], &end, 10);
-    samples         = strtol(argv[5], &end, 10);
 }
 
 void load_data()
 {
-    file_input.resize(problem_size);
+    input_data = new uint8_t[problem_size];
 
     FILE* file = fopen(filename.c_str(), "rb");
 
-    fread(&input_data, sizeof(input_data[0]), input_data.size(), file);
+    if(!file)
+    {
+      printf("Data read failed.\n");
+      return;
+    }
+
+    fread(input_data, sizeof(input_data[0]), problem_size, file);
 
     fclose(file);
+
+    printf("Data read.\n");
 }
 
 void store_data()
 {
     FILE* file = fopen((filename + ".res").c_str(), "wb");
 
+    uint8_t output_data[problem_size];
+
+
     fwrite(&system_time, sizeof(system_time), 1, file);
     fwrite(&kernel_time, sizeof(kernel_time), 1, file);
 
+    // reading from output data yields garbage. clone.
+    size_t k = 0;
     for(unsigned i = 0; i < num_devices; ++i) {
-        fwrite(&output[i], sizeof(cl_uchar), output[i].size(), file)
+      for(unsigned j = 0; j < n_per_device[i]; ++j) {
+        output_data[k++] = output[i][j];
+      }
     }
 
+
+    fwrite(output_data, sizeof(uint8_t), problem_size, file);
+
     fclose(file);
+
+    printf("Data stored.\n");
 }
 // Initializes the OpenCL objects.
 bool init_opencl() {
@@ -160,7 +178,7 @@ bool init_opencl() {
 
   // Create the program for all device. Use the first device as the
   // representative device (assuming all device are of the same type).
-  std::string binary_file = getBoardBinaryFile("lbp_altera", device[0]);
+  std::string binary_file = getBoardBinaryFile("lbp_ocl", device[0]);
   printf("Using AOCX: %s\n", binary_file.c_str());
   program = createProgramFromBinary(context, binary_file.c_str(), device, num_devices);
 
@@ -172,9 +190,9 @@ bool init_opencl() {
   queue.reset(num_devices);
   kernel.reset(num_devices);
   n_per_device.reset(num_devices);
-  input_image_buf.reset(num_devices);
+  input_buf.reset(num_devices);
   local_spoints.reset(num_devices);
-  output_image_buf.reset(num_devices);
+  output_buf.reset(num_devices);
 
   for(unsigned i = 0; i < num_devices; ++i) {
     // Command queue.
@@ -182,7 +200,7 @@ bool init_opencl() {
     checkError(status, "Failed to create command queue");
 
     // Kernel.
-    const char *kernel_name = "vector_add";
+    const char *kernel_name = "lbp";
     kernel[i] = clCreateKernel(program, kernel_name, &status);
     checkError(status, "Failed to create kernel");
 
@@ -197,14 +215,16 @@ bool init_opencl() {
 
     // Input buffers.
     input_buf[i] = clCreateBuffer(context, CL_MEM_READ_ONLY, 
-        n_per_device[i] * sizeof(cl_uint), NULL, &status);
+        n_per_device[i] * sizeof(cl_uchar), NULL, &status);
     checkError(status, "Failed to create buffer for input");
 
     // Output buffer.
     output_buf[i] = clCreateBuffer(context, CL_MEM_WRITE_ONLY, 
-        n_per_device[i] * sizeof(cl_uint), NULL, &status);
+        n_per_device[i] * sizeof(cl_uchar), NULL, &status);
     checkError(status, "Failed to create buffer for output");
   }
+
+  printf("OpenCL initialized.\n");
 
   return true;
 }
@@ -214,27 +234,30 @@ void init_problem() {
   if(num_devices == 0) {
     checkError(-1, "No devices");
   }
-
+ 
   input.reset(num_devices);
   output.reset(num_devices);
-
 
   // Generate input vectors A and B and the reference output consisting
   // of a total of N elements.
   // We create separate arrays for each device so that each device has an
   // aligned buffer. 
+  size_t offset = 0;
+
   for(unsigned i = 0; i < num_devices; ++i) {
     input[i].reset(n_per_device[i]);
     output[i].reset(n_per_device[i]);
 
     for(unsigned j = 0; j < n_per_device[i]; ++j) {
-        size_t offset   = i == 0 
-                        ? 0
-                        : n_per_device[i - 1];
-
+      offset += i > 1 
+              ? n_per_device[i - 1]
+              : 0;
+      
       input[i][j] = input_data[offset + j];
     }
   }
+
+  printf("Problem initialized.\n");
 }
 
 void run() {
@@ -246,14 +269,19 @@ void run() {
   scoped_array<cl_event> kernel_event(num_devices);
   scoped_array<cl_event> finish_event(num_devices);
 
+  printf("run start.\n");
+
   for(unsigned i = 0; i < num_devices; ++i) {
+
+
+    printf("Transfer Input.\n");
 
     // Transfer inputs to each device. Each of the host buffers supplied to
     // clEnqueueWriteBuffer here is already aligned to ensure that DMA is used
     // for the host-to-device transfer.
     cl_event write_event;
     status = clEnqueueWriteBuffer(queue[i], input_buf[i], CL_FALSE,
-        0, n_per_device[i] * sizeof(cl_uint), input[i], 0, NULL, &write_event);
+        0, n_per_device[i] * sizeof(cl_uchar), input[i], 0, NULL, &write_event);
     checkError(status, "Failed to transfer input");
 
     // Set kernel arguments.
@@ -267,10 +295,6 @@ void run() {
     status = clSetKernelArg(kernel[i], argi++, sizeof(cl_mem), &output_buf[i]);
     checkError(status, "Failed to set argument %d", argi - 1);
 
-    // spoints local mem
-    status = clSetKernelArg(kernel[i], argi++, sizeof(float) * 2 * samples, NULL);
-    checkError(status, "Failed to set argument %d", argi - 1);
-
     // width
     status = clSetKernelArg(kernel[i], argi++, sizeof(int32_t), &width);
     checkError(status, "Failed to set argument %d", argi - 1);
@@ -280,13 +304,10 @@ void run() {
     checkError(status, "Failed to set argument %d", argi - 1);
 
     // radius
-    status = clSetKernelArg(kernel[i], argi++, sizeof(int32_t), &radius);
+    status = clSetKernelArg(kernel[i], argi++, sizeof(uint8_t), &radius);
     checkError(status, "Failed to set argument %d", argi - 1);
 
-    // samples
-    status = clSetKernelArg(kernel[i], argi++, sizeof(int32_t), &samples);
-    checkError(status, "Failed to set argument %d", argi - 1);
-
+    
 
     // Enqueue kernel.
     // Use a global work size corresponding to the number of elements to add
@@ -301,13 +322,14 @@ void run() {
     const size_t global_work_size = n_per_device[i];
     printf("Launching for device %d (%d elements)\n", i, global_work_size);
 
-    status = clEnqueueNDRangeKernel(queue[i], kernel[i], 1, NULL,
+    status = clEnqueueNDRangeKernel(queue[i], kernel[i], 2, NULL,
         &global_work_size, NULL, 1, &write_event, &kernel_event[i]);
     checkError(status, "Failed to launch kernel");
 
     // Read the result. This the final operation.
     status = clEnqueueReadBuffer(queue[i], output_buf[i], CL_FALSE,
-        0, n_per_device[i] * sizeof(cl_uint), output[i], 1, &kernel_event[i], &finish_event[i]);
+        0, n_per_device[i] * sizeof(cl_uchar), output[i], 1, &kernel_event[i], &finish_event[i]);
+    checkError(status, "Failed to retrieve data");
 
     // Release local events.
     clReleaseEvent(write_event);
@@ -338,6 +360,8 @@ void run() {
     clReleaseEvent(kernel_event[i]);
     clReleaseEvent(finish_event[i]);
   }  
+
+  printf("OpenCL executed.\n");
 }
 
 // Free the resources allocated during initialization
@@ -363,4 +387,8 @@ void cleanup() {
   if(context) {
     clReleaseContext(context);
   }
+
+  if(input_data)
+    delete[] input_data;
+  printf("Cleaned up.\n");
 }

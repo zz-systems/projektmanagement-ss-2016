@@ -11,7 +11,7 @@ import pyopencl as cl
 import os
 os.environ['PYOPENCL_COMPILER_OUTPUT'] = '1'
 
-in_image = Image.open('test.JPG').convert('L')
+in_image = Image.open('test.jpg').convert('L')
 [w, h] = [in_image.size[0], in_image.size[1]]
 
 # add border
@@ -47,10 +47,7 @@ mf = cl.mem_flags
 in_image_buf = cl.Buffer(ctx, mf.READ_ONLY | mf.COPY_HOST_PTR, hostbuf=in_image_arr)
 out_image_buf = cl.Buffer(ctx, mf.WRITE_ONLY, in_image_arr.nbytes)
 
-samples = 8
-spoints_local = cl.LocalMemory(4 * 2 * samples)
-
-with open("lbp.cl", 'r') as f:
+with open("device/lbp_altera.cl", 'r') as f:
     program_str = f.read()
 
 prg = cl.Program(ctx, program_str).build()
@@ -60,11 +57,9 @@ prg = cl.Program(ctx, program_str).build()
 prg.lbp(queue, (w, h), None,
         in_image_buf,
         out_image_buf,
-        spoints_local,
         np.int32(w),
         np.int32(h),
-        np.float32(3),
-        np.int32(samples)).wait()
+        np.uint8(3)).wait()
 
 result = np.empty_like(in_image_arr)
 cl.enqueue_copy(queue, result, out_image_buf)
