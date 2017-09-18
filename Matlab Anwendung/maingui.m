@@ -143,7 +143,9 @@ currentImage = handles.core.grayscale();
 
 % build lbp variant with given algorithm in matlab
 tic;
-[result(fileCount).mlImage,result(fileCount).mlHist] = lbp_sir(imresize(currentImage, [256 256]));
+[lbp_img,result(fileCount).mlHist] = lbp_sir(imresize(currentImage(:, :, 1), [256 256]));
 result(fileCount).lbpMlTime = toc;
+
+result(fileCount).mlImage = uint8(cat(3,lbp_img, lbp_img, lbp_img));
 handles.core.displayImage(result(fileCount).mlImage, handles.axMatlabLBP);
 axis off;
