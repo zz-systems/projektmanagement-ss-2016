@@ -89,17 +89,6 @@ function varargout = maingui_OutputFcn(hObject, eventdata, handles)
 varargout{1} = handles.output;
 
 
-% --- Executes on button press in btnGrayscale.
-function btnGrayscale_Callback(hObject, eventdata, handles)
-% hObject    handle to btnGrayscale (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-global currentImage;
-currentImage = handles.core.grayscale();
-imagesc(currentImage, 'Parent', handles.axes1);
-axis off;
-
-
 % --- Executes on button press in btnSendOcl.
 function btnSendOcl_Callback(hObject, eventdata, handles)
 % hObject    handle to btnSendOcl (see GCBO)
@@ -113,7 +102,7 @@ if isempty(currentImage)
 else
     % time measurement of function below
     tic;
-    result(fileCount).oclImage = handles.com.openCl(currentImage);
+    result(fileCount).oclImage = handles.com.openCl(imresize(currentImage, [256 256]));
     result(fileCount).lbpOclTime = toc;
 end
 
@@ -131,7 +120,7 @@ if isempty(currentImage)
 else
     % time measurement of function below
     tic;
-    result(fileCount).hwImage = handles.com.vhdlHardware(currentImage);
+    result(fileCount).hwImage = handles.com.vhdlHardware(imresize(currentImage, [256 256]));
     result(fileCount).lbpHwTime = toc;
 end
 
@@ -151,21 +140,20 @@ function btnOpen_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 global fileCount;
+global currentImage;
+global result;
+
 handles.core.openImage();
 fileCount = fileCount + 1;
 set(handles.txtFileCount,'String',fileCount);
 handles.core.displayRawImage(handles.axes1);
 axis off;
 
+% convert opened image to grayscale
+currentImage = handles.core.grayscale();
+axis off;
 
-% --- Executes on button press in btnLbpMatlab.
-function btnLbpMatlab_Callback(hObject, eventdata, handles)
-% hObject    handle to btnLbpMatlab (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-global currentImage;
-global result;
-global fileCount;
+% build lbp variant with given algorithm in matlab
 tic;
 result(fileCount).mlImage = lbp_sir(imresize(currentImage, [256 256]));
 result(fileCount).lbpMlTime = toc;
