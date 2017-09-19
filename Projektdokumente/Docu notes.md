@@ -74,6 +74,7 @@ Folgende Kommandos werden interpretiert:
 2 Varianten wurden entworfen. Beide wurden zuvor auf dem Rechner getestet (7700K, 32GB, GTX1080Ti)
 ## Kanonisch
 - viele Gleitkomma Operationen
+- round() auf GTX1080Ti ist fehlerhaft. Dadurch gab es sämtliche Speicherbereichsüberschreitungen. Ersetzt durch eine eigene Umsetzung.
 - beliebige Anzahl an Samples
 - beliebiger Radius (Gleitkomma)
 - Interpolation, da der Radius beliebig sein kann
