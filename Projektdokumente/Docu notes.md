@@ -13,6 +13,7 @@ Der Datentransfer zum DE1-SoC Board baut auf SSH auf.
     - `source ./init_opencl.sh` -- Initialisierung der OpenCL Umgebung
     - `aocl program /dev/acl0 lbp_ocl.aocx` -- Programmierung des FPGA mit dem kompilierten OpenCL Kernel
     - `./lbp_ocl_host input.dat 256 256 1` -- Ausführung des Hostprogramms mit Datei `input.dat`, Breite = `256`, Höhe = `256`, Radius = `1` 
+    - Gesamtbefehl: `ssh root@192.168.0.123 "source ./init_opencl.sh;aocl program /dev/acl0 lbp_ocl.aocx;./lbp_ocl_host input.dat 256 256 1"`
     - Ergebnis wird unter `input.dat.res` gespeichert
 3. Datentransfer zum PC: `tth` (Transfer To Host)
     - `scp root@192.168.0.123:/ocl_data/input.dat.res input.dat.res`
@@ -83,7 +84,7 @@ Folgende Kommandos werden interpretiert:
     - Sehr große generierte "schaltung"
     - Passt nicht auf das Cyclone V des DE1-SoC: 97% aller Logikzellen belegt
     - => Neuentwicklung des Kernels, reduktion auf das Wesentliche
-    
+
 ## Synthetisierbar
 - Keine Gleitkommaoperationen
 - Anzahl Samples auf Wert 8 fixiert.
