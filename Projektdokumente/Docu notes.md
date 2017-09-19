@@ -1,6 +1,8 @@
-#Matlab:
-##Schnittstelle PC / Board
-###DE1-SoC
+# Matlab:
+
+## Schnittstelle PC / Board
+
+### DE1-SoC
 Der Datentransfer zum DE1-SoC Board baut auf SSH auf. 
 
 1. Datentransfer zum Board: `ttd` (Transfer To Device)
@@ -20,7 +22,8 @@ Der Datentransfer zum DE1-SoC Board baut auf SSH auf.
         - LBP-Verarbeitete Bilddatei (Luminanzdaten)
     - Diese Daten werden zur weiteren Auswertung herangezogen.
 
-###ZedBoard (TODO!! Subject to change!!)
+### ZedBoard (TODO!! Subject to change!!)
+
 Der Datentransfer zum ZedBoard baut auf UART auf. 
 der PC ist in diesem Fall der Master, das Board das Slave, jeweils abgekürzt als *S* und *M*.
 
