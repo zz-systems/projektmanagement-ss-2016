@@ -69,9 +69,9 @@ Folgende Kommandos werden interpretiert:
     - M --> `ylo` --> S (Untere 8 bit der Zeilenadresse)
     - M <-- `dat` <-- S (ein Datenbyte, Host darf erneut einen neuen Befehl ausführen)
 
-## Umsetzung LBP in OpenCL
+# Umsetzung LBP in OpenCL
 2 Varianten wurden entworfen. Beide wurden zuvor auf dem Rechner getestet (7700K, 32GB, GTX1080Ti)
-### Kanonisch
+## Kanonisch
 - viele Gleitkomma Operationen
 - beliebige Anzahl an Samples
 - beliebiger Radius (Gleitkomma)
@@ -83,7 +83,8 @@ Folgende Kommandos werden interpretiert:
     - Sehr große generierte "schaltung"
     - Passt nicht auf das Cyclone V des DE1-SoC: 97% aller Logikzellen belegt
     - => Neuentwicklung des Kernels, reduktion auf das Wesentliche
-### Synthetisierbar
+    
+## Synthetisierbar
 - Keine Gleitkommaoperationen
 - Anzahl Samples auf Wert 8 fixiert.
 - Beliebiger ganzzahliger, diskreter Radius, z.B: (x = Samplepunkt, c = Zentrum)
