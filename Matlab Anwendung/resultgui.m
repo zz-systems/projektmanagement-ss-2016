@@ -72,6 +72,7 @@ end
 data = {char(col1'),char(col2'),char(col3'),char(col4'),char(col5')};
 colNames = {'OpenCl', 'VHDL', 'Matlab Reference', 'Relative Error Matlab/OpenCL', 'Relative Error Matlab/VHDL'};
 format = {'char', 'char', 'char', 'char', 'char'};
+
 set(handles.tblResult, 'Data', data, 'ColumnName', colNames, 'ColumnWidth', 'auto', 'ColumnFormat', format);
 
 % Update handles structure
