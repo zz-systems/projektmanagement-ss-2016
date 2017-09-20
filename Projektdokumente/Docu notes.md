@@ -91,7 +91,7 @@ Folgende Kommandos werden interpretiert:
 - Anzahl Samples auf Wert 8 fixiert.
 - Beliebiger ganzzahliger, diskreter Radius, z.B: (x = Samplepunkt, c = Zentrum)
     - Radius 1:
-    x x s
+    x x x
     x c x
     x x x
     - Radius 2:
@@ -116,6 +116,58 @@ Folgende Kommandos werden interpretiert:
         - 4 Kernel: ~56s
         - => Speicherprobleme (konkurrente Zugriffe)
 
+# Umsetzung LBP in VHDL
 
+- Kumar's Lösung ist nur für Simulation gedacht.
+- Viele nicht synthetisierbare Konstrukte
+- Keine in Hardware verwertbare Infrastruktur für Eingabe/Ausgabe
+
+## Grundlagen
+- LBP Operator
+    - Verrechnet ein Datenfenster
+- LBP Kernel
+    - Verarbeitet Daten in einem Speicherbereich
+- LBP Kernel Array
+    - Mehrere Kernel
+- Processing unit
+    Hauptrecheneinheit, beinhaltet:
+    - Eingabepuffer
+    - Ausgabepuffer
+    - Kernel array
+- Processing unit input memory
+    - Eingabepuffer, Speicherbereich für das komplette Eingangsbild
+    - Block-RAM basiert
+    - Multi-port fähig
+- Processing unit output memory
+    - Ausgabepuffer, Speicherbereich für das verarbeitete Ausgangsbild
+    - Block-RAM basiert
+    - Bedingt Multi-port fähig
+- Control unit
+    - Hauptsteuereinheit
+    - Zuständig für Datentransfers und Steuerung vom Host
+    - Implementiert das oben beschriebene (Matlab -> ZedBoard) Protokoll
+- Host interface UART (PHY)
+    - UART Schnittstelle
+- Avalon Schnittstelle
+    - Kommunikation mit dem ARM Prozessor über die Avalon / AXI Schnittstelle
+
+## DE1-SoC
+- Für das DE1-SoC ist der Aufwand enorm:
+    - Avalon MM Schnittstelle, damit eine Anbindung an den ARM Hauptprozessor stattfinden kann
+    - Linux-Kernelmodul als Treiber
+    - Userspace-Programm für den eigentlichen Datentransfer (Ansteuerung vom Host via SSH, vgl. dazu DatenTransfer für OpenCL)
+- Es wurde ein Qsys-Projekt erstellt
+    - lbp-modul mit Avalon Schnittstelle als IP-Core
+    - Hard Processor System IP-Core
+- Probleme
+    - Aufgrund von Fehlern bei der Umsetzung des LBP-Moduls nicht synthetisierbar
+    - Potentielle Probleme mit dem Betriebssystem / Treiber falls zur Laufzeit das FPGA umprogrammiert wird (Wechsel zwischen VHDL / OpenCL Lösung)    
+    - Auf eine weitere Entwicklung wurde verzichtet und ein reiner Hardware-basierter Ansatz auf Basis des ZedBoards (um Rekonfiguration bei der Präsentation zu vermeiden) mit UART-Schnittstelle weiterverfolgt
+
+## ZedBoard
+- UART Schnittstelle zum Hostrechner
+- Keine Avalon Schnittstelle
+- Weitere Komponenten wie oben geschildert.
+- Simulation nicht zu 100% erfolgreich.
 
 
