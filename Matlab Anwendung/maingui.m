@@ -101,11 +101,11 @@ if isempty(currentImage)
     msgbox('Please open file first!');
 else
     % start LBP with OpenCL solution
-    [result(fileCount).oclImage, result(fileCount).lbpOclTime, kernelTime] = handles.com.openCl(imresize(currentImage, [256 256]));
+    [result(fileCount).oclImage, systemTime, result(fileCount).lbpOclTime] = handles.com.openCl(imresize(currentImage, [256 256]));
     result(fileCount).lbpOclHist = hist(result(fileCount).oclImage(:),0:255);
     
     % start LBP with VHDL solution
-    [result(fileCount).hwImage, result(fileCount).lbpHwTime, kernelTime] = handles.com.vhdlHardware(imresize(currentImage, [256 256]));
+    [result(fileCount).hwImage, systemTime, result(fileCount).lbpHwTime] = handles.com.vhdlHardware(imresize(currentImage, [256 256]));
     result(fileCount).lbpHwHist = hist(result(fileCount).hwImage(:),0:255);
     
     % display both calculated LBP images on their axis
