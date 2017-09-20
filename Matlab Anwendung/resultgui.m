@@ -56,6 +56,8 @@ function resultgui_OpeningFcn(hObject, eventdata, handles, varargin)
 handles.output = hObject;
 handles.core = ImgCore();
 
+format short;
+
 [m,n] = size(varargin{1,1});
 col1=zeros(m,n);
 col2=zeros(m,n);
@@ -63,9 +65,9 @@ col3=zeros(m,n);
 col4=zeros(m,n);
 col5=zeros(m,n);
 for i = 1:n
-    col1(i) = varargin{1,1}(i).lbpOclTime;
-    col2(i) = varargin{1,1}(i).lbpHwTime;
-    col3(i) = varargin{1,1}(i).lbpMlTime;
+    col1(i) = varargin{1,1}(i).lbpOclTime*1000;
+    col2(i) = varargin{1,1}(i).lbpHwTime*1000;
+    col3(i) = varargin{1,1}(i).lbpMlTime*1000;
     col4(i) = handles.core.relError(varargin{1,1}(i).mlHist, varargin{1,1}(i).lbpOclHist);
     col5(i) = handles.core.relError(varargin{1,1}(i).mlHist, varargin{1,1}(i).lbpHwHist);
 end

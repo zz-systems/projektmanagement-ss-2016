@@ -1,4 +1,4 @@
-function [result, histogram] = lbp_sir(varargin)
+function result = lbp_sir(varargin)
 
 narginchk(1,5);
 image=varargin{1};

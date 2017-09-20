@@ -101,11 +101,11 @@ if isempty(currentImage)
     msgbox('Please open file first!');
 else
     % start LBP with OpenCL solution
-    [result(fileCount).oclImage, result(fileCount).lbpOclTime, kernelTime] = handles.com.openCl(imresize(currentImage, [256 256]));
+    [result(fileCount).oclImage, systemTime, result(fileCount).lbpOclTime] = handles.com.openCl(imresize(currentImage(:, :, 1), [256 256]));
     result(fileCount).lbpOclHist = hist(result(fileCount).oclImage(:),0:255);
     
     % start LBP with VHDL solution
-    [result(fileCount).hwImage, result(fileCount).lbpHwTime, kernelTime] = handles.com.vhdlHardware(imresize(currentImage, [256 256]));
+    [result(fileCount).hwImage, systemTime, result(fileCount).lbpHwTime] = handles.com.vhdlHardware(imresize(currentImage(:, :, 1), [256 256]));
     result(fileCount).lbpHwHist = hist(result(fileCount).hwImage(:),0:255);
     
     % display both calculated LBP images on their axis
@@ -143,9 +143,10 @@ currentImage = handles.core.grayscale();
 
 % build lbp variant with given algorithm in matlab
 tic;
-[lbp_img,result(fileCount).mlHist] = lbp_sir(imresize(currentImage(:, :, 1), [256 256]));
+lbp_img = lbp_sir(imresize(currentImage(:, :, 1), [256 256]));
 result(fileCount).lbpMlTime = toc;
 
 result(fileCount).mlImage = uint8(cat(3,lbp_img, lbp_img, lbp_img));
+result(fileCount).mlHist = hist(result(fileCount).mlImage(:),0:255);
 handles.core.displayImage(result(fileCount).mlImage, handles.axMatlabLBP);
 axis off;
