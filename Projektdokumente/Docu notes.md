@@ -169,5 +169,6 @@ Folgende Kommandos werden interpretiert:
 - Keine Avalon Schnittstelle
 - Weitere Komponenten wie oben geschildert.
 - Simulation nicht zu 100% erfolgreich.
+- Aktueller Stand: in Entwicklung.
 
 
