@@ -56,24 +56,24 @@ function resultgui_OpeningFcn(hObject, eventdata, handles, varargin)
 handles.output = hObject;
 handles.core = ImgCore();
 
-[m,n] = size(varargin{1,1});
-col1=strings([m,n]);
-col2=strings([m,n]);
-col3=strings([m,n]);
-col4=strings([m,n]);
-col5=strings([m,n]);
-for i = 1:n
-    col1(i) = sprintf("%.2f ms", varargin{1,1}(i).lbpOclTime*1000);
-    col2(i) = sprintf("%.2f ms", varargin{1,1}(i).lbpHwTime*1000);
-    col3(i) = sprintf("%.2f ms", varargin{1,1}(i).lbpMlTime*1000);
-    col4(i) = sprintf("%.2f %%", handles.core.relError(varargin{1,1}(i).mlHist, varargin{1,1}(i).lbpOclHist));
-    col5(i) = sprintf("%.2f %%", handles.core.relError(varargin{1,1}(i).mlHist, varargin{1,1}(i).lbpHwHist));
-end
-data = {char(col1'),char(col2'),char(col3'),char(col4'),char(col5')};
-colNames = {'OpenCl', 'VHDL', 'Matlab Reference', 'Relative Error Matlab/OpenCL', 'Relative Error Matlab/VHDL'};
-format = {'char', 'char', 'char', 'char', 'char'};
+format short;
 
-set(handles.tblResult, 'Data', data, 'ColumnName', colNames, 'ColumnWidth', 'auto', 'ColumnFormat', format);
+[m,n] = size(varargin{1,1});
+col1=zeros(n,m);
+col2=zeros(n,m);
+col3=zeros(n,m);
+col4=zeros(n,m);
+col5=zeros(n,m);
+for i = 1:n
+    col1(i) = varargin{1,1}(i).lbpOclTime*1000;
+    col2(i) = varargin{1,1}(i).lbpHwTime*1000;
+    col3(i) = varargin{1,1}(i).lbpMlTime*1000;
+    col4(i) = handles.core.relError(varargin{1,1}(i).mlHist, varargin{1,1}(i).lbpOclHist);
+    col5(i) = handles.core.relError(varargin{1,1}(i).mlHist, varargin{1,1}(i).lbpHwHist);
+end
+colNames = {'OpenCl', 'VHDL', 'Matlab Reference', 'Relative Error Matlab/OpenCL', 'Relative Error Matlab/VHDL'};
+
+set(handles.tblResult, 'Data', [col1,col2,col3,col4,col5], 'ColumnName', colNames, 'ColumnWidth', 'auto');
 
 % Update handles structure
 guidata(hObject, handles);
