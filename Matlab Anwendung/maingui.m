@@ -111,7 +111,7 @@ else
     % display both calculated LBP images on their axis
     handles.core.displayImage(result(fileCount).hwImage, handles.axVHDL);
     handles.core.displayImage(result(fileCount).oclImage, handles.axOCl);
-    axis off;
+    set(findobj(gcf, 'type','axes'), 'Visible','off');
 end
 
 
@@ -149,4 +149,4 @@ result(fileCount).lbpMlTime = toc;
 result(fileCount).mlImage = uint8(cat(3,lbp_img, lbp_img, lbp_img));
 result(fileCount).mlHist = hist(result(fileCount).mlImage(:),0:255);
 handles.core.displayImage(result(fileCount).mlImage, handles.axMatlabLBP);
-axis off;
+set(findobj(gcf, 'type','axes'), 'Visible','off');
