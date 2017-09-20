@@ -14,7 +14,7 @@ classdef boardSim < handle
        function [lbp, system_time, kernel_time] = vhdlHardware(self, img)
           lbp = img;
           system_time = 0.0;
-          kernel_time = 0.356;
+          kernel_time = 0.35672612247;
        end
     end
 end

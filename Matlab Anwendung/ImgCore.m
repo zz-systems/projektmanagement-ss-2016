@@ -30,15 +30,17 @@ classdef ImgCore < handle
        
        function relErr = relError(self, img1, img2)
            % Returns relative Error in percent
-           re = 0;
-           for i = 1:255
-               if img1(i)>=img2(i)
-                   re = re + (img1(i) - img2(i));
-               else
-                   re = re + (img2(i) - img1(i));
-               end
-           end
-           relErr = re * 100 / sum(img1);
+%            re = 0;
+%            for i = 1:255
+%                if img1(i)>=img2(i)
+%                    re = re + (img1(i) - img2(i));
+%                else
+%                    re = re + (img2(i) - img1(i));
+%                end
+%            end
+%            relErr = re * 100 / sum(img1);
+            re = abs(img1 - img2);
+            relErr = (sum(re)*100) / sum(img1);
        end
    end
 end
