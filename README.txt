@@ -18,12 +18,6 @@ Altera OpenCL Dokumentation
 Masterarbeit Hr. Kumar
 
 ---------------------------
-Bilder:
----------------------------
-
-Testbilder, zur Verfügung gestellt von Hr. Zuyev
-
----------------------------
 LBP HDL Port:
 ---------------------------
 
