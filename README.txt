@@ -54,7 +54,7 @@ Unsere OpenCL-Anwendungen
 Projektdokumente:
 ---------------------------
 
-Unsere kompletten Projektdateien.
+Unsere Projektdateien.
 
 Points of interest: 
 
