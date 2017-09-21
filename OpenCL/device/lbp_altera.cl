@@ -16,6 +16,10 @@ constant char2   neighborhood[SAMPLES] =
     {-1,  0}  // center left
 };
 
+//__attribute__((num_simd_work_items(16)))
+//__attribute__((num_compute_units(4)))
+//__attribute__((max_work_group_size(256 * 256)))
+//__attribute__((reqd_work_group_size(256,256,1)))
 kernel void lbp(
     global uchar* restrict in,
     global uchar* restrict out,
