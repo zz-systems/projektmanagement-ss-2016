@@ -29,7 +29,7 @@ classdef BoardCom < handle
               device_output_file = [name, ext, '.res'];
               
               self.ttd(fname, [self.target_root, '/ocl_data']);
-              self.cmd([self.cmd_aocl_init, sprintf(self.cmd_aocl_run, device_input_file, 256, 256, 3)]);
+              self.cmd([self.cmd_aocl_init, sprintf(self.cmd_aocl_run, device_input_file, 256, 256, 1)]);
               self.tth([self.target_root, '/ocl_data/', device_output_file], device_output_file);
           end
           %system('ssh root@192.168.0.123 "source ./init_opencl.sh;aocl program /dev/acl0 boardtest.aocx;./lbp_host"')
@@ -46,15 +46,18 @@ classdef BoardCom < handle
            else
                disp("Image found!");
                
-               fname = self.write_lum_data_file(img);       
+               %fname = self.write_lum_data_file(img);       
               
-               [pathstr,name,ext] = fileparts(fname);
+               %[pathstr,name,ext] = fileparts(fname);
               
-               self.ttd(fname, [self.target_root, '/hw_data']);
+               %self.ttd(fname, [self.target_root, '/hw_data']);
                %self.cmd([self.cmd_aocl_init, sprintf(self.cmd_aocl_run, fname, 256, 256, 1, 8)]);
-               self.tth([self.target_root, '/hw_data/', name, '.res'], [name, ext, '.res']);
+               %self.tth([self.target_root, '/hw_data/', name, '.res'], [name, ext, '.res']);
            end
-           [lbp, system_time, kernel_time] = self.read_result_file([name, ext, '.res']);
+           %[lbp, system_time, kernel_time] = self.read_result_file([name, ext, '.res']);
+           lbp = img;
+           system_time = 0;
+           kernel_time = 0;
        end
    end
    
@@ -102,8 +105,6 @@ classdef BoardCom < handle
            img_data = cat(3, img_data, img_data, img_data);
            
            img = uint8(img_data);
-           
-           figure, imshow(img);
        end
    end
 end

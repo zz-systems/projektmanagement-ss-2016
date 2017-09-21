@@ -34,13 +34,15 @@ kernel void lbp(
 
     uchar center = in[index];
     uchar result = 0;
+
     for(int i = 0; i < SAMPLES; i++)
     {
         char2 sample_pos = neighborhood[i] * (char)radius;
         uchar sample = in[index + sample_pos.y * w + sample_pos.x];
 
-        if(sample >= center)
-            result |= 1 << i;
+        // for whatever reason the condition has to be inverted here.
+        if(sample < center)
+            result |= 1 << (7 - i);
     }
 
     out[index] = result;

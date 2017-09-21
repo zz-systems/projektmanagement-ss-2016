@@ -6,28 +6,39 @@ library work;
     use work.pm_lib.all;
 
 
-entity top is  
+entity lbp_standalone is  
+generic 
+(
+    cols        : integer := 256;
+	rows        : integer := 256;
+
+	radius 		: integer := 1;
+	margin 		: integer := 1;
+
+	kernels_x 	: integer := 1;
+	kernels_y 	: integer := 1
+);
 port 
 (
-	clk : in std_logic;
-	rst : in std_logic;
+	GCLK : in std_logic;
+	RST : in std_logic;
 
-	rx : in std_logic;
-	tx : out std_logic
+	UART_RX : in std_logic;
+	UART_TX : out std_logic
 );
-end top;
+end lbp_standalone;
 
 
-architecture rtl of top is
+architecture rtl of lbp_standalone is
 	-- generic config
-	constant cols : integer := 256;
-	constant rows : integer := 256;
-
-	constant radius 		: integer := 1;
-	constant margin 		: integer := 1;
-
-	constant kernels_x 		: integer := 1;
-	constant kernels_y 		: integer := 1;
+--	constant cols : integer := 256;
+--	constant rows : integer := 256;
+--
+--	constant radius 		: integer := 1;
+--	constant margin 		: integer := 1;
+--
+--	constant kernels_x 		: integer := 1;
+--	constant kernels_y 		: integer := 1;
 
 	-- host interface ----------------------------------------------------------
 	signal host_din 	: byte_t;
@@ -52,28 +63,28 @@ architecture rtl of top is
 begin
 
 	-- host interface ----------------------------------------------------------
-	HIF : host_interface_uart
+	HIF : entity work.host_interface_uart
 	port map
 	(
-		clk 	=> clk,
-		rst 	=> rst,
+		clk 	=> GCLK,
+		rst 	=> RST,
 
-		din 	=> host_din,
-		dout 	=> host_dout,
+		din 	=> host_dout,
+		dout 	=> host_din,
 		we 		=> host_we,
 		davail 	=> host_davail,
 		busy 	=> host_busy,
 
-		rx 		=> rx,
-		tx 		=> tx
+		rx 		=> UART_RX,
+		tx 		=> UART_TX
 	);
 
 	-- control unit ------------------------------------------------------------
-	CU : control_unit 
+	CU : entity work.control_unit 
 	port map
 	(
-		clk			=> clk,
-		rst 		=> rst,
+		clk			=> GCLK,
+		rst 		=> RST,
 
 		-- memory interface --------------------------------------------------------
 	    row 		=> mem_row,
@@ -97,7 +108,7 @@ begin
 	);
 
 	-- processing unit ---------------------------------------------------------
-	PU : processing_unit 
+	PU : entity work.processing_unit 
 	generic map
 	(
 		rows 		=> rows,
@@ -111,8 +122,8 @@ begin
 	)
 	port map
 	(
-		clk 	=> clk,
-		rst 	=> rst or pu_reset,
+		clk 	=> GCLK,
+		rst 	=> RST or pu_reset,
 
 		-- memory interface ----------------------------------------------------
 		row 	=> mem_row,

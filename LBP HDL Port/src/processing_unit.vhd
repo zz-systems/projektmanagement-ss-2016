@@ -56,11 +56,12 @@ architecture rtl of processing_unit is
 	signal kin_mem_we 	: std_logic_vector(kernels_range);
 
 	signal kin_mem_din 	: byte_array_t(kernels_range);
-	signal kin_mem_dout : byte_array3d_t(kernels_range)(radius_range)(radius_range);
+	signal kin_mem_dout : byte_array_t(kernels_range);--(radius_range)(radius_range);
+	signal kin_mem_davail : std_logic_vector(kernels_range);
 
 	-- shared kernel output ----------------------------------------------------
 	signal kout_mem_we 		: std_logic_vector(kernels_range);
-	signal kout_mem_din 		: byte_array_t(kernels_range);
+	signal kout_mem_din 	: byte_array_t(kernels_range);
 	signal kout_mem_dout 	: byte_array_t(kernels_range);
 
 begin	
@@ -78,7 +79,7 @@ begin
 						
 	kin_mem_din     <= (others => (others => '0')) when enable else 
 						(others => din);
-    kout_mem_we <= (others => '1') when enable else 
+    kout_mem_we <= kin_mem_davail when enable else 
                     (others => '0');
                     
 	dout <= kout_mem_dout(0);
@@ -99,7 +100,7 @@ begin
 --	end if;
 
 	-- shared kernel input memory ----------------------------------------------
-	KIN_MEM : pu_local_input_memory
+	KIN_MEM : entity work.pu_local_input_memory
 	generic map
 	(
 		ports 	=> kernels,
@@ -107,8 +108,7 @@ begin
 		mem_w 	=> cols,
 		mem_h 	=> rows,
 
-		radius 	=> radius,
-		margin 	=> margin
+		radius 	=> radius
 	)
 	port map
 	(
@@ -120,11 +120,13 @@ begin
 
 		we 		=> kin_mem_we,
 		din 	=> kin_mem_din,
-		dout 	=> kin_mem_dout
+		dout 	=> kin_mem_dout,
+		
+		davail => kin_mem_davail
 	);
 
 	-- kernel array ------------------------------------------------------------
-	KRNL : kernel_array 
+	KRNL : entity work.kernel_array 
 	generic map
 	(
 		kernels_x 	=> kernels_x,
@@ -150,7 +152,7 @@ begin
 	);
 
 	-- shared kernel output memory ---------------------------------------------
-	KOUT_MEM : pu_local_output_memory
+	KOUT_MEM : entity work.pu_local_output_memory
 	generic map
 	(
 		ports 	=> kernels,

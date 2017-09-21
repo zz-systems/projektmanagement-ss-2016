@@ -20,20 +20,20 @@ end lbp_operator;
 architecture rtl of lbp_operator is
     signal lbp, lbp_s : byte_t;
 begin
-    process(clk, rst)
-    begin
-        if rst then
-            lbp <= (others => '0');
-        elsif rising_edge(clk) then
-            lbp <= lbp_s;
-        end if;
-    end process;
+    --process(clk, rst)
+    --begin
+    --    if rst = '1' then
+    --        lbp     <= (others => '0');           
+    --    elsif rising_edge(clk) then
+    --        lbp <= lbp_s;
+    --    end if;
+    --end process;
 
     GLBP : for i in lbp'range generate
     begin
-        lbp_s(i) <= to_std_logic(unsigned(neighborhood(i)) >= unsigned(center));
+        dout(i) <= to_std_logic(unsigned(neighborhood(i)) >= unsigned(center));
     end generate;
 
-    dout <= lbp;
+    --dout <= lbp;
 
 end rtl;

@@ -1,0 +1,29 @@
+INFO: [VRFC 10-163] Analyzing VHDL file "Z:/Documents/DEV/projektmanagement-ss-2017/LBP HDL Port/src/Third party/uart/source/uart.vhd" into library work
+INFO: [VRFC 10-307] analyzing entity uart
+INFO: [VRFC 10-163] Analyzing VHDL file "Z:/Documents/DEV/projektmanagement-ss-2017/LBP HDL Port/src/pm_lib_package.vhd" into library pm_lib
+INFO: [VRFC 10-163] Analyzing VHDL file "Z:/Documents/DEV/projektmanagement-ss-2017/LBP HDL Port/src/control_unit.vhd" into library pm_lib
+INFO: [VRFC 10-307] analyzing entity control_unit
+INFO: [VRFC 10-163] Analyzing VHDL file "Z:/Documents/DEV/projektmanagement-ss-2017/LBP HDL Port/src/host_interface_uart.vhd" into library pm_lib
+INFO: [VRFC 10-307] analyzing entity host_interface_uart
+INFO: [VRFC 10-163] Analyzing VHDL file "Z:/Documents/DEV/projektmanagement-ss-2017/LBP HDL Port/src/lbp_operator.vhd" into library pm_lib
+INFO: [VRFC 10-307] analyzing entity lbp_operator
+INFO: [VRFC 10-163] Analyzing VHDL file "Z:/Documents/DEV/projektmanagement-ss-2017/LBP HDL Port/src/kernel.vhd" into library pm_lib
+INFO: [VRFC 10-307] analyzing entity kernel
+INFO: [VRFC 10-163] Analyzing VHDL file "Z:/Documents/DEV/projektmanagement-ss-2017/LBP HDL Port/src/kernel_array.vhd" into library pm_lib
+INFO: [VRFC 10-307] analyzing entity kernel_array
+INFO: [VRFC 10-163] Analyzing VHDL file "Z:/Documents/DEV/projektmanagement-ss-2017/LBP HDL Port/src/ram_xilinx.vhd" into library pm_lib
+INFO: [VRFC 10-307] analyzing entity ram
+INFO: [VRFC 10-163] Analyzing VHDL file "Z:/Documents/DEV/projektmanagement-ss-2017/LBP HDL Port/src/pu_local_input_memory.vhd" into library pm_lib
+INFO: [VRFC 10-307] analyzing entity pu_local_input_memory
+INFO: [VRFC 10-163] Analyzing VHDL file "Z:/Documents/DEV/projektmanagement-ss-2017/LBP HDL Port/src/pu_local_output_memory.vhd" into library pm_lib
+INFO: [VRFC 10-307] analyzing entity pu_local_output_memory
+INFO: [VRFC 10-163] Analyzing VHDL file "Z:/Documents/DEV/projektmanagement-ss-2017/LBP HDL Port/src/processing_unit.vhd" into library pm_lib
+INFO: [VRFC 10-307] analyzing entity processing_unit
+INFO: [VRFC 10-163] Analyzing VHDL file "Z:/Documents/DEV/projektmanagement-ss-2017/LBP HDL Port/src/top.vhd" into library pm_lib
+INFO: [VRFC 10-307] analyzing entity lbp_standalone
+INFO: [VRFC 10-163] Analyzing VHDL file "Z:/Documents/DEV/projektmanagement-ss-2017/LBP HDL Port/src/test/tb_lbp_operator.vhd" into library pm_lib
+INFO: [VRFC 10-307] analyzing entity tb_lbp_operator
+INFO: [VRFC 10-163] Analyzing VHDL file "Z:/Documents/DEV/projektmanagement-ss-2017/LBP HDL Port/src/test/tb_lbp_kernel.vhd" into library pm_lib
+INFO: [VRFC 10-307] analyzing entity tb_lbp_kernel
+INFO: [VRFC 10-163] Analyzing VHDL file "Z:/Documents/DEV/projektmanagement-ss-2017/LBP HDL Port/src/test/tb_pu_local_input_memory.vhd" into library pm_lib
+INFO: [VRFC 10-307] analyzing entity tb_pu_local_input_memory

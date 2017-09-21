@@ -1,0 +1,19 @@
+# compile vhdl design source files
+vhdl work  "../../../../../src/Third party/uart/source/uart.vhd"
+vhdl2008 pm_lib  "../../../../../src/pm_lib_package.vhd"
+vhdl2008 pm_lib  "../../../../../src/control_unit.vhd"
+vhdl2008 pm_lib  "../../../../../src/host_interface_uart.vhd"
+vhdl2008 pm_lib  "../../../../../src/lbp_operator.vhd"
+vhdl2008 pm_lib  "../../../../../src/kernel.vhd"
+vhdl2008 pm_lib  "../../../../../src/kernel_array.vhd"
+vhdl2008 pm_lib  "../../../../../src/ram_xilinx.vhd"
+vhdl2008 pm_lib  "../../../../../src/pu_local_input_memory.vhd"
+vhdl2008 pm_lib  "../../../../../src/pu_local_output_memory.vhd"
+vhdl2008 pm_lib  "../../../../../src/processing_unit.vhd"
+vhdl2008 pm_lib  "../../../../../src/top.vhd"
+vhdl2008 pm_lib  "../../../../../src/test/tb_lbp_operator.vhd"
+vhdl2008 pm_lib  "../../../../../src/test/tb_lbp_kernel.vhd"
+vhdl2008 pm_lib  "../../../../../src/test/tb_pu_local_input_memory.vhd"
+
+# Do not sort compile order
+nosort

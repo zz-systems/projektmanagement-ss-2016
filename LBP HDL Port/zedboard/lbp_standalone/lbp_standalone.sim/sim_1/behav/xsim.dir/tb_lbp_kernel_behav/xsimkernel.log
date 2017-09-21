@@ -1,0 +1,4 @@
+Running: xsim.dir/tb_lbp_kernel_behav/xsimk.exe -simmode gui -wdb tb_lbp_kernel_behav.wdb -simrunnum 0 -socket 54720
+Design successfully loaded
+Design Loading Memory Usage: 6680 KB (Peak: 6680 KB)
+Design Loading CPU Usage: 46 ms

@@ -46,6 +46,7 @@ begin
         if rst then
         elsif rising_edge(clk) then
             ret_state <= listen;
+            mem_we      <= '0';
             case state is 
 
                 -- listen to incoming commands ---------------------------------
@@ -98,6 +99,7 @@ begin
                         row         <= row_addr;
                         col         <= col_addr;                        
                         mem_dout    <= host_din;
+                        mem_we      <= '1';
 
                         state       <= snd_cmd_ack;
                         ret_state   <= listen;

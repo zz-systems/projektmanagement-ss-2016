@@ -11,7 +11,7 @@ import pyopencl as cl
 import os
 os.environ['PYOPENCL_COMPILER_OUTPUT'] = '1'
 
-in_image = Image.open('test.jpg').convert('L')
+in_image = Image.open('test.jpg').resize((256, 256), Image.ANTIALIAS).convert('L')
 [w, h] = [in_image.size[0], in_image.size[1]]
 
 # add border
@@ -59,7 +59,7 @@ prg.lbp(queue, (w, h), None,
         out_image_buf,
         np.int32(w),
         np.int32(h),
-        np.uint8(3)).wait()
+        np.uint8(1)).wait()
 
 result = np.empty_like(in_image_arr)
 cl.enqueue_copy(queue, result, out_image_buf)

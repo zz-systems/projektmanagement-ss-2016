@@ -105,7 +105,7 @@ else
     result(fileCount).lbpOclHist = hist(result(fileCount).oclImage(:),0:255);
     
     % start LBP with VHDL solution
-    [result(fileCount).hwImage, systemTime, result(fileCount).lbpHwTime] = handles.com.vhdlHardware(imresize(currentImage(:, :, 1), [256 256]));
+    [result(fileCount).hwImage, systemTime, result(fileCount).lbpHwTime] = handles.com.vhdlHardware(result(fileCount).mlImage);
     result(fileCount).lbpHwHist = hist(result(fileCount).hwImage(:),0:255);
     
     % display both calculated LBP images on their axis

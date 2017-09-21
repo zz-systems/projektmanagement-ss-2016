@@ -24,7 +24,7 @@ port
     row_addr    : out word_array_t      (kernels_x * kernels_y - 1 downto 0);
     col_addr    : out word_array_t      (kernels_x * kernels_y - 1 downto 0);
 
-    din         : in byte_array3d_t     (kernels_x * kernels_y - 1 downto 0)(-radius to radius)(-radius to radius);
+    din         : in byte_array_t       (kernels_x * kernels_y - 1 downto 0);--(-radius to radius)(-radius to radius);
     dout        : out byte_array_t      (kernels_x * kernels_y - 1 downto 0);
 
     busy        : out std_logic
@@ -49,7 +49,7 @@ begin
 			-- kernel index
 			constant ki : natural := kx * kernels_x + ky;         
 		begin
-			K : kernel 
+			K : entity work.kernel 
 			generic map
 			(
 				 kernel_col  => kx,
@@ -68,10 +68,11 @@ begin
 				 row         => row_addr(ki),
 				 col         => col_addr(ki),
 
-				 din         => din(ki),
+				 din         => (others => (others => '0')),--din(ki),
 				 dout        => dout(ki),
 
-				 busy        => kbusy(ki)
+				 busy        => kbusy(ki),
+                 enable      => '1'
 			);
 
         end generate;
