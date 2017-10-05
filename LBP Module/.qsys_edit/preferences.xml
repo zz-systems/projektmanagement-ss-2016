@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<preferences>
+ <debug showDebugMenu="0" />
+ <systemtable>
+  <columns>
+   <connections preferredWidth="47" />
+   <irq preferredWidth="34" />
+  </columns>
+ </systemtable>
+ <clocktable>
+  <columns>
+   <clockname preferredWidth="244" />
+   <clocksource preferredWidth="244" />
+   <frequency preferredWidth="224" />
+  </columns>
+ </clocktable>
+ <library
+   expandedCategories="Library/Memories and Memory Controllers,Library,Library/Peripherals/Debug and Performance,Library/Microcontroller Peripherals,Project,Library/Merlin Components,Library/Memories and Memory Controllers/On-Chip,Library/Peripherals/Display,Library/Peripherals/Microcontroller Peripherals,Library/Memories and Memory Controllers/External Memory Interfaces,Library/Peripherals" />
+ <window width="1100" height="800" x="0" y="0" />
+</preferences>

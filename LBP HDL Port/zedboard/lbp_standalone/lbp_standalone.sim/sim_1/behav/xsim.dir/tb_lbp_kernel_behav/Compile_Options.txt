@@ -1,0 +1,1 @@
+-wto "485d9add827145c995ff2a5d25c529dc" --debug "typical" --relax --mt "2" -L "work" -L "pm_lib" -L "secureip" --snapshot "tb_lbp_kernel_behav" "pm_lib.tb_lbp_kernel" -log "elaborate.log" 
